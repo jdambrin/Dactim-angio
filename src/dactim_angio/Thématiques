@@ -1,0 +1,28 @@
+Thématiques 
+
+Vasculaire/ AVC ischémique dans pimissut:
+	- Partie recalage (moi/clément/guillaume), multimodalité
+	- Métabolisme cerveau/rein avec la spectro diffusion (utilisation de la diffusion pour positionner la grille ou le voxel de spectroscopie), futur travail : grille vs stat spatiales (Clément Giraud).
+	- Biomécanique (mécanique des fluides/déformations).
+	- Segmentation de l'AVC (IA maison sur les gliomes) ischémique.
+	--> orga d'un GT sur la thématique vasculaire au sens large (une fois par mois ?).
+
+Thématique gliome (3T/7T)/ Sclérose en plaques (7T) / AZH :
+	- Travail de Clément Giraud (stats spatiale) fusion spectro/tissus 
+	- Métabolisme modélisation EDO/EDP --> suivi longitudinal (avec Laurence et Madalina). EDP théorique/numérique et assimilation de données. Cinétique chimique (temps) + structuration spatiale avec CH. Suite travaux Alain, Angélique...
+	- Resection --> plus ou moins abandonné car le per-opératoire ne fonctionne plus tant que ça.
+	- Segmentation par IA (bien établi) : trois classes (3T/7T) : partie active, nécrose, oedeme.
+	- Modélisation par fronts
+	- reconstruction du tenseur de diffusion Funck, Jean-Baptiste (stage Hugo)
+	- prise en compte de la génétique + anapat + IRM () --> Réseau de neurones --> Indicateur de sévérité. But : prédiction+biopsie virtuelle. Xavier Le Guilloux (généticien thèse de maths).
+
+Colaboration avec le Brésil sur le métabolisme : IRM Spectro et PET --> AZH (glutamate et glutamine). Projet de traitement pour AZH.
+
+Sport :
+	- ANR MOVE : IRM fonctionnnelle et métabolique pour le sport (avec Luc Pellerin)
+
+EN résumé imagerie :
+	- hémodynmaique (XA+MRA-IRM)
+	- métabolique (Spectro/perfusion)
+	- segmentation (IA)
+	- fonctionnel (diffusion et IRM-F)
