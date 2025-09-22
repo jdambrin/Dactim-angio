@@ -466,6 +466,6 @@ if __name__=='__main__':
 
 	#x=multiScaleRegister(grid_xa, grid_tof,xa_frame,sigma_add=[16,8,4,2,0],Nsamples=[125,250,500,1000,2000],metric=opposite_correlation)
 
-	times
+	print(times)
 
 
