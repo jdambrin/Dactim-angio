@@ -2,7 +2,7 @@ import sys
 sys.path.append('../')
 from dactim_angio.grid import SpatialGrid
 from dactim_angio.grid import SpatialGridAffine
-from dactim_angio.grid import SpatialGridPerspective
+from dactim_angio.grid import SpatialGrid_XA
 
 from dactim_angio.geom import Camera
 from dactim_angio.geom import GaussianRays
@@ -17,11 +17,14 @@ from dactim_angio.geom import kernel_r
 
 from dactim_angio.metrics import opposite_correlation
 from dactim_angio.metrics import blabla
+from dactim_angio.metrics import mutual_information_kernel
 
 from scipy.spatial import KDTree
 from scipy.sparse import coo_array
 from scipy.sparse.linalg import cg
 from scipy.ndimage import gaussian_filter
+
+from scipy.optimize import check_grad
 
 from sklearn.neighbors import BallTree
 from scipy.optimize import minimize
@@ -33,14 +36,21 @@ import matplotlib.pyplot as plt
 
 import time
 
+times={}
+
 def measure_time(func):
     def new_func(*args, **kwargs):
         tic = time.time()
         res = func(*args, **kwargs)
         toc = time.time()
         print(f"[{func.__name__} finished in {toc-tic:.4f}s]")
+        print(times)
+        if func.__name__ not in times:
+        	times[func.__name__] = 0
+        times[func.__name__]+=toc-tic
         return res
     return new_func
+
 
 
 
@@ -128,12 +138,6 @@ class Sampler():
 		#plt.imshow(np.max(grid_tof_rescaled.dat['1'],axis=0))
 		#plt.show()
 
-#		plot_xa_tof(grid_xa_rescaled, grid_tof_rescaled)
-
-		#print('Ratio XA :',len(scalars_xa_reduced)/self.N_samples)
-		#plot_xa_tof_with_sample_points(grid_xa_rescaled,grid_tof_rescaled,self.sample_points_xa,self.sample_points_tof)
-
-
 	def sample(self):
 		sample_points=np.concatenate((self.sample_points_xa,self.sample_points_tof))
 		sample_rays=RayFan(self.center,sample_points)
@@ -145,13 +149,25 @@ class Sampler():
 
 	def euler_gradient_sample(self):
 		derivT=getAffineDerivatives(self.theta_x,self.theta_y,self.theta_z,self.sx,self.sy,self.sz)
+		T,Tinv=getAffine(self.theta_x,self.theta_y,self.theta_z,self.sx,self.sy,self.sz)
 		sample_points=np.concatenate((self.sample_points_xa,self.sample_points_tof))
-		sample_rays=RayFan(self.center,sample_points)
-		sample_scalar_tof_derivative=[]
+
+		sample_rays_xa=RayFan(self.center,self.sample_points_xa)
+		sample_rays_tof=RayFan(self.center,self.sample_points_tof)
+		
+		deriv_samples_wrt_tof=[]
+		deriv_samples_wrt_xa=[]
+		
 		for i in range(6):
-			sample_scalar_tof_derivative.append(self.scalar_tof_cloud.eval_rays_shape_derivative(lambda x : applyAffine(derivT[i],x) ,sample_rays,0))
-			#sample_scalar_tof_derivative.append(self.scalar_tof_cloud.eval_rays_shape_derivative(lambda x : applyAffine(derivT[i],x) ,sample_rays,self.sigma_add))
-		return sample_scalar_tof_derivative
+			deriv_xa_samples_wrt_tof=self.scalar_tof_cloud.eval_rays_shape_derivative(lambda x : applyAffine(derivT[i],applyAffine(Tinv,x)) , lambda x : 0*x, sample_rays_xa,0)
+			deriv_tof_samples_wrt_tof=self.scalar_tof_cloud.eval_rays_shape_derivative(lambda x : applyAffine(derivT[i],applyAffine(Tinv,x)) , lambda x : applyAffine(derivT[i],applyAffine(Tinv,x)), sample_rays_tof,0)
+			deriv_samples_wrt_tof.append(np.concatenate((deriv_xa_samples_wrt_tof,deriv_tof_samples_wrt_tof)))
+
+			deriv_xa_samples_wrt_xa=0*deriv_xa_samples_wrt_tof
+			deriv_tof_samples_wrt_xa=self.scalar_xa_rays.eval_shape_derivative(lambda x : 0*x , lambda x : applyAffine(derivT[i],applyAffine(Tinv,x)), sample_rays_tof,0)
+			deriv_samples_wrt_xa.append(np.concatenate((deriv_xa_samples_wrt_xa,deriv_tof_samples_wrt_xa)))
+
+		return deriv_samples_wrt_xa,deriv_samples_wrt_tof
 
 	def update_tof_points(self,theta_x,theta_y,theta_z,sx,sy,sz):
 		self.theta_x=theta_x
@@ -174,14 +190,14 @@ class Sampler():
 		T=getAffine(theta_x,theta_y,theta_z,sx,sy,sz)[0]
 		self.scalar_tof_cloud.points=applyAffine(T,self.scalar_tof_cloud_points_init)
 
-def load_data(path_xa,path_tof,path_tof_segm,right):
+def load_data(path_xa,path_xa_metadata,path_tof,path_tof_segm,right):
 
-	grid_xa=SpatialGridPerspective.fromNifti(path_xa)
+	grid_xa=SpatialGrid_XA.fromNifti(path_xa,path_xa_metadata)
 
-	for d in grid_xa.dat:
-		vmax=np.percentile(grid_xa.dat[d],99)
-		vmin=0#0.2*vmax
-		grid_xa.dat[d]=np.clip(grid_xa.dat[d],vmin,vmax)-vmin
+	#for d in grid_xa.dat:
+	#	vmax=np.percentile(grid_xa.dat[d],99)
+	#	vmin=0#0.2*vmax
+	#	grid_xa.dat[d]=np.clip(grid_xa.dat[d],vmin,vmax)-vmin
 
 
 	grid_tof=SpatialGridAffine.fromNifti(path_tof)
@@ -189,15 +205,13 @@ def load_data(path_xa,path_tof,path_tof_segm,right):
 	grid_tof_segm=SpatialGridAffine.fromNifti(path_tof_segm)
 
 	if(right):
-		grid_tof.dat['1']=grid_tof.dat['0']*((grid_tof_segm.dat['0']==2)+(grid_tof_segm.dat['0']==4)>0)
+		grid_tof.dat['1']=((grid_tof_segm.dat['0']==2)+(grid_tof_segm.dat['0']==4)>0).astype('float')
 	else:
-		grid_tof.dat['1']=grid_tof.dat['0']*((grid_tof_segm.dat['0']==1)+(grid_tof_segm.dat['0']==4)>0)
+		grid_tof.dat['1']=((grid_tof_segm.dat['0']==1)+(grid_tof_segm.dat['0']==4)>0).astype('float')
 
-	grid_tof.dat['2']=grid_tof.dat['0']*(grid_tof_segm.dat['0']>0)
+	grid_tof.dat['2']=(grid_tof_segm.dat['0']>0).astype('float')
 
 	return grid_xa, grid_tof
-
-
 
 def register(grid_xa, grid_tof,sigma_add,Nsamples,x0,xa_frame,metric):
 	@measure_time
@@ -212,9 +226,9 @@ def register(grid_xa, grid_tof,sigma_add,Nsamples,x0,xa_frame,metric):
 		sampler=args[0]
 		sampler.update_tof_points(x[0],x[1],x[2],x[3],x[4],x[5])
 		sample_points,sample_scalar_xa,sample_scalar_tof=sampler.sample()
-		sample_scalar_tof_derivative=sampler.euler_gradient_sample()
-		corr,deriv_corr= metric(sample_scalar_xa,sample_scalar_tof)
-		return [np.dot(deriv_corr,sample_scalar_tof_derivative[i]) for i in range(6)]
+		deriv_samples_wrt_xa,deriv_samples_wrt_tof=sampler.euler_gradient_sample()
+		corr,deriv_corr_x,deriv_corr_y= metric(sample_scalar_xa,sample_scalar_tof)
+		return [np.dot(deriv_corr_x,deriv_samples_wrt_xa[i])+np.dot(deriv_corr_y,deriv_samples_wrt_tof[i]) for i in range(6)]
 
 	mySampler=Sampler(grid_xa,grid_tof,sigma_add,Nsamples,xa_frame)
 
@@ -240,7 +254,6 @@ def register(grid_xa, grid_tof,sigma_add,Nsamples,x0,xa_frame,metric):
 	print(res)
 	return res.x
 
-
 def multiScaleRegister(grid_xa, grid_tof,xa_frame,sigma_add,Nsamples,metric):
 	
 	plot_xa_tof(grid_xa, grid_tof,xa_frame)
@@ -263,93 +276,105 @@ def multiScaleRegister(grid_xa, grid_tof,xa_frame,sigma_add,Nsamples,metric):
 	return x
 
 
-def validGradients(grid_xa, grid_tof):
+def validGradients_metric(metric,metric_args_list=[]):
+	pass
+
+def validGradients_sampler(grid_xa, grid_tof,xa_frame):
+	
+	mySampler=Sampler(grid_xa,grid_tof,2,500,xa_frame)
+	x0=[0,0,0,0,0,0] 
 
 	@measure_time
 	def func_to_minimize(x,*args):
 		sampler=args[0]
 		sampler.update_tof_points(x[0],x[1],x[2],x[3],x[4],x[5])
 		sample_points,sample_scalar_xa,sample_scalar_tof=sampler.sample()
-		return opposite_correlation(sample_scalar_xa,sample_scalar_tof)[0]
+		return np.array(sample_scalar_xa)
 
 	@measure_time
 	def Jac_func_to_minimize(x,*args):
 		sampler=args[0]
 		sampler.update_tof_points(x[0],x[1],x[2],x[3],x[4],x[5])
 		sample_points,sample_scalar_xa,sample_scalar_tof=sampler.sample()
-		sample_scalar_tof_derivative=sampler.euler_gradient_sample()
-		corr,deriv_corr= opposite_correlation(sample_scalar_xa,sample_scalar_tof)
-		return [np.dot(deriv_corr,sample_scalar_tof_derivative[i]) for i in range(6)]
+		deriv_samples_wrt_xa,deriv_samples_wrt_tof=sampler.euler_gradient_sample()
+		return np.array(deriv_samples_wrt_xa).T
 
-	mySampler=Sampler(grid_xa,grid_tof,2,500,9)
-	x0=[0,0,0,0,0,0] 
+
+	epsilons=[10**(-i) for i in range(3,9)]
+	err_grad_xa=[]
+	for eps in epsilons:
+		err_grad_xa.append(check_grad(func_to_minimize,Jac_func_to_minimize,x0,(mySampler),epsilon=eps))
+
+
+	@measure_time
+	def func_to_minimize(x,*args):
+		sampler=args[0]
+		sampler.update_tof_points(x[0],x[1],x[2],x[3],x[4],x[5])
+		sample_points,sample_scalar_xa,sample_scalar_tof=sampler.sample()
+		return np.array(sample_scalar_tof)
+
+	@measure_time
+	def Jac_func_to_minimize(x,*args):
+		sampler=args[0]
+		sampler.update_tof_points(x[0],x[1],x[2],x[3],x[4],x[5])
+		sample_points,sample_scalar_xa,sample_scalar_tof=sampler.sample()
+		deriv_samples_wrt_xa,deriv_samples_wrt_tof=sampler.euler_gradient_sample()
+		return np.array(deriv_samples_wrt_tof).T
+
+
+	epsilons=[10**(-i) for i in range(3,9)]
+	err_grad_tof=[]
+	for eps in epsilons:
+		err_grad_tof.append(check_grad(func_to_minimize,Jac_func_to_minimize,x0,(mySampler),epsilon=eps))
+
+	plt.loglog(epsilons,err_grad_xa,'.-')
+	plt.loglog(epsilons,err_grad_tof,'.-')
+	plt.show()
+
+def validGradients_full_pipeline(grid_xa, grid_tof,xa_frame,metric,metric_args_list=[]):
+
+	@measure_time
+	def func_to_minimize(x,*args):
+		sampler=args[0]
+		sampler.update_tof_points(x[0],x[1],x[2],x[3],x[4],x[5])
+		sample_points,sample_scalar_xa,sample_scalar_tof=sampler.sample()
+		return metric(sample_scalar_xa,sample_scalar_tof,metric_args_list)[0]
+
+	@measure_time
+	def Jac_func_to_minimize(x,*args):
+		sampler=args[0]
+		sampler.update_tof_points(x[0],x[1],x[2],x[3],x[4],x[5])
+		sample_points,sample_scalar_xa,sample_scalar_tof=sampler.sample()
+		deriv_samples_wrt_xa,deriv_samples_wrt_tof=sampler.euler_gradient_sample()
+		corr,deriv_corr_x,deriv_corr_y= metric(sample_scalar_xa,sample_scalar_tof,metric_args_list)
+		return [np.dot(deriv_corr_x,deriv_samples_wrt_xa[i])+np.dot(deriv_corr_y,deriv_samples_wrt_tof[i]) for i in range(6)]
+
+	mySampler=Sampler(grid_xa,grid_tof,2,500,xa_frame)
+	
+	x0=0.5*np.array([1,1,1,1,1,1])*2*(np.random.rand(6)-0.5)
+
 	sample_points,sample_scalar_xa,sample_scalar_tof=mySampler.sample()
 
 	shape_deriv_tofbar=mySampler.euler_gradient_sample()
 
-	direction=np.array([10,10,10,10,10,10])*2*(np.random.rand(6)-0.5)
-	t=np.linspace(-1,1,100)
+	direction=0.5*np.array([1,1,1,1,1,1])*2*(np.random.rand(6)-0.5)
+	t=np.linspace(-1,1,101)
 
 	deriv=np.dot(Jac_func_to_minimize(x0,mySampler),direction)
 	u0=func_to_minimize(x0,mySampler)
 
-	u_approx=np.zeros(100)
-	u=np.zeros(100)
+	u_approx=np.zeros(101)
+	u=np.zeros(101)
 
-	for i in range(100):
+	for i in range(101):
 		print(i)
 		u_approx[i]=t[i]*deriv+u0
-		u[i]=func_to_minimize(t[i]*direction,mySampler)
+		u[i]=func_to_minimize(t[i]*direction+x0,mySampler)
 
 	plt.plot(0,u0,marker='o')
 	plt.plot(t,u_approx)
 	plt.plot(t,u)
 	plt.show()
-
-def testIntegralAlongRays():
-
-	points=np.array([[1,1,0],[1,-1,0]])
-	rays=np.array([[1,0,0],[0,1,0]])
-	center=np.array([[0,0,0]])
-
-	T=getAffine(10,-5,15,1,2,3)[0]
-	points=applyAffine(T,points)
-	rays=applyAffine(T,rays)
-	center=applyAffine(T,center)
-
-
-	scalar_cloud=GaussianPoints(points,np.array([1,1]),1)
-	sample_rays=RayFan(center,rays)
-
-	print(scalar_cloud.eval_rays(sample_rays))
-	print(2*np.exp(-1)*np.sqrt(np.pi)*scalar_cloud.weights[0])
-
-def testIntegralAlongRaysDerivative():
-
-	points=np.array([[1,1,0],[-1,1,0]])
-	rays=np.array([[1,-1,0],[0,0,0]])
-	center=np.array([[0,-1,0]])
-
-	T=getAffine(0,0,0,0,0,0)[0]
-	points=applyAffine(T,points)
-	rays=applyAffine(T,rays)
-	center=applyAffine(T,center)
-
-	scalar_cloud=GaussianPoints(points,np.array([1,1]),1)
-	sample_rays=RayFan(center,rays)
-
-	derivT=getAffineDerivatives(0,0,0,0,0,0)
-
-	sample_scalar_tof_derivative=[]
-
-	for i in range(6):
-		sample_scalar_tof_derivative.append(scalar_cloud.eval_rays_shape_derivative(lambda x : applyAffine(derivT[i],x) ,sample_rays))
-
-	for d in sample_scalar_tof_derivative :
-		print(d)
-
-
-	print(2*4*np.exp(-2**2)*np.sqrt(np.pi)*scalar_cloud.weights[0])
 
 def plot_xa_tof(grid_xa,grid_tof,xa_frame):
 
@@ -364,7 +389,6 @@ def plot_xa_tof(grid_xa,grid_tof,xa_frame):
 	p.add_mesh(cam_pv,line_width=5,color='darkred',opacity=0.5)
 	p.add_mesh(grid_xa_pv,cmap='Reds',opacity='linear',scalars=str(xa_frame),show_scalar_bar=False)
 	p.add_mesh(grid_tof_pv.contour([0.1*grid_tof_pv.point_data['1'].max()],grid_tof_pv.point_data['1']), color="blue",copy_mesh=True,opacity=0.2)	
-#p.add_mesh(grid_tof_pv.contour(np.linspace(0,grid_tof_pv.point_data['1'].max(),100),grid_tof_pv.point_data['1']), cmap='Blues',copy_mesh=True,opacity='linear')	
 	p.add_mesh(grid_tof_pv.contour([0.1*grid_tof_pv.point_data['1'].max()],grid_tof_pv.point_data['2']), color="gray",copy_mesh=True,opacity=0.1)
 	
 	p.camera.position = tuple(grid_xa.center)
@@ -410,18 +434,38 @@ def plot_xa_tof_with_sample_points(grid_xa,grid_tof,sample_points_xa,sample_poin
 	p.show()
 
 
+def pre_proc_dsa(grid_xa):
+	X=np.zeros((len(grid_xa.dat),np.prod(grid_xa.shape)))
+	grid_xa_new=grid_xa.copy()
+
+	for i in range(X.shape[0]):
+		grid_xa_new.dat[i]=np.clip(grid_xa.dat[0]-grid_xa.dat[i],0,None)
+
+	return grid_xa_new
+	
 if __name__=='__main__':
-	patient_id=22
-	xa_frame=17
+
+	patient_id=17
+	xa_frame=18
 	
 	path_tof='/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_'+str(patient_id)+'.nii.gz'
 	path_xa='/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/xa_front_nifti_files/Patient_'+str(patient_id)+'.nii.gz'
+	path_xa_metadata='/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/xa_front_nifti_files/Patient_'+str(patient_id)+'_metadata.json'
 	path_tof_segm='/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_'+str(patient_id)+'_CoW_seg.nii.gz'
 
+	grid_xa, grid_tof=load_data(path_xa,path_xa_metadata,path_tof,path_tof_segm,right=True)
+	grid_xa=pre_proc_dsa(grid_xa)
 
-	grid_xa, grid_tof=load_data(path_xa,path_tof,path_tof_segm,right=False)
-	x=multiScaleRegister(grid_xa, grid_tof,xa_frame,sigma_add=[16,8,4,2,0],Nsamples=[125,250,500,1000,2000],metric=opposite_correlation)
+	bounds_xa=(grid_xa.dat[xa_frame].min(),grid_xa.dat[xa_frame].max())
+	bounds_tof=(0,15)
 
-
-
+	validGradients_full_pipeline(grid_xa, grid_tof,xa_frame,mutual_information_kernel,metric_args_list=[bounds_xa,bounds_tof,50])
+	#validGradients(grid_xa, grid_tof,xa_frame,opposite_correlation)
 	
+	#validGradients_sampler(grid_xa, grid_tof,xa_frame)
+
+	#x=multiScaleRegister(grid_xa, grid_tof,xa_frame,sigma_add=[16,8,4,2,0],Nsamples=[125,250,500,1000,2000],metric=opposite_correlation)
+
+	times
+
+

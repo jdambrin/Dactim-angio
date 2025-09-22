@@ -65,10 +65,10 @@ class GaussianPoints():
 		values=MyMatrix.T@(self.weights)
 		return values
 
-	def eval_rays_shape_derivative(self,grad_T,ray_fan,sigma_add=0):
-		grad_t_xi=grad_T(self.points)
+	def eval_rays_shape_derivative(self,GRAD_T_points,GRAD_T_rays,ray_fan,sigma_add=0):
 		sigma_angle=np.asin((self.sigma+sigma_add)/np.min(np.linalg.norm(self.points-ray_fan.center,axis=1)))
-		res=ray_fan.distPointsMatrix_deriv_V2(self.points,grad_t_xi,5*sigma_angle)
+		res=ray_fan.distPointsMatrix_deriv_V3(self.points,GRAD_T_points,GRAD_T_rays,5*sigma_angle)
+
 		MyMatrix=res['dists']
 		MyMatrix2=res['pscal']
 		MyMatrix.data=-2*(MyMatrix2.data)*kernel_r(MyMatrix.data,self.sigma+sigma_add)*np.sqrt(np.pi)/(self.sigma+sigma_add)
@@ -92,6 +92,13 @@ class GaussianRays():
 		values=MyMatrix@(self.weights)
 		return values
 
+	def eval_shape_derivative(self,GRAD_T_points,GRAD_T_rays,ray_fan_data,sigma_angle_add=0):
+		res=ray_fan_data.distPointsMatrix_deriv_V4(self.ray_fan.points,GRAD_T_points,GRAD_T_rays,5*self.sigma_angle)
+		MyMatrix=res['dists']
+		MyMatrix2=res['pscal']
+		MyMatrix.data=-2*(MyMatrix2.data)*kernel_r(MyMatrix.data,self.sigma_angle+sigma_angle_add)/((self.sigma_angle+sigma_angle_add)**2)
+		values=MyMatrix.T@(self.weights)
+		return values
 	
 	def toPyvista(self,n0,n1,radius,name):
 		points_spherical=cart2sphere(self.ray_fan.points-self.ray_fan.center)
@@ -165,7 +172,6 @@ class RayFan():
 
 		return Mat
 
-
 	def distPointsMatrix_deriv(self,query_points,variation_vector,r_angle):
 		query_points_spherical=cart2sphere(query_points-self.center)
 		(ind, dist)=self.tree.query_radius(query_points_spherical[:,1:],r_angle, return_distance=True)
@@ -203,7 +209,6 @@ class RayFan():
 		Mat2=Mat.asformat('coo')
 
 		return {'dists':Mat,'pscal':Mat2}
-
 
 	def distPointsMatrix_deriv_V2(self,query_points,variation_vector,r_angle):
 		query_points_spherical=cart2sphere(query_points-self.center)
@@ -264,6 +269,148 @@ class RayFan():
 		
 		return {'dists':Mat,'pscal':Mat2}
 
+	def distPointsMatrix_deriv_V3(self,query_points,GRAD_T_query,GRAD_T_obs,r_angle):
+		query_points_spherical=cart2sphere(query_points-self.center)
+		(ind, dist)=self.tree.query_radius(query_points_spherical[:,1:],r_angle, return_distance=True)
+		radii=query_points_spherical[:,0]
+
+		rayVectors  = self.points-self.center
+		queryVectors = query_points-self.center
+
+		# Longueurs des listesoverl pour reconstruction plus tard
+		lengths = np.array([len(d) for d in dist])
+
+		# Indices inverses pour retrouver la ligne d’origine
+		row_indices = np.repeat(np.arange(len(dist)), lengths)
+		all_ind = np.concatenate(ind)
+
+		# Aplatissement des distances et indices
+		all_thetas = np.concatenate(dist)
+		all_radii  = radii[row_indices]
+
+		all_ray_vectors = rayVectors[all_ind]                            # (total_pts, 3)
+
+		Ntot=all_ray_vectors.shape[0]
+
+		all_thetas=all_thetas.reshape((Ntot,1))
+		all_radii=all_radii.reshape((Ntot,1))
+
+		all_ray_points=self.points[all_ind] 
+		all_ray_vectors_norm=np.linalg.norm(all_ray_vectors,axis=1).reshape((Ntot,1))
+
+		all_query_vectors= queryVectors[row_indices]
+		all_query_points=query_points[row_indices]
+		all_query_vectors_norm=np.linalg.norm(all_query_vectors,axis=1).reshape((Ntot,1))
+		
+		all_query_points_variation=GRAD_T_query(all_query_points)
+
+		all_ray_points_variation=GRAD_T_obs(all_ray_points)
+
+		all_norm_cos=(all_query_vectors_norm/all_ray_vectors_norm)*np.cos(all_thetas)
+
+
+		all_dists = np.sin(all_thetas) * all_radii
+		
+		all_proj =  np.einsum('ij,ij->i',all_query_points_variation, 
+			all_query_vectors-all_norm_cos*all_ray_vectors)
+
+		all_proj += np.einsum('ij,ij->i',all_ray_points_variation,
+			-all_norm_cos*all_query_vectors+(all_norm_cos**2)*all_ray_vectors)
+
+		all_dists=all_dists.reshape(Ntot)
+		all_proj=all_proj.reshape(Ntot)
+
+		# ---- Reconstruction des matrices creuses ----
+
+		n_rows = query_points.shape[0]
+		n_cols = self.N
+
+		Mat = coo_matrix((all_dists, (row_indices, all_ind)), shape=(n_rows, n_cols))
+		Mat2 = coo_matrix((all_proj, (row_indices, all_ind)), shape=(n_rows, n_cols))
+
+		#print("Distance Matrix")
+		#print(Mat)
+
+		#print("variation vector")
+		#print(variation_vector)
+
+		#print("Pscal Matrix")
+		#print(Mat2)
+		
+		return {'dists':Mat,'pscal':Mat2}
+
+	def distPointsMatrix_deriv_V4(self,query_points,GRAD_T_query,GRAD_T_obs,r_angle):
+		query_points_spherical=cart2sphere(query_points-self.center)
+		(ind, dist)=self.tree.query_radius(query_points_spherical[:,1:],r_angle, return_distance=True)
+		radii=query_points_spherical[:,0]
+
+		rayVectors  = self.points-self.center
+		queryVectors = query_points-self.center
+
+		# Longueurs des listesoverl pour reconstruction plus tard
+		lengths = np.array([len(d) for d in dist])
+
+		# Indices inverses pour retrouver la ligne d’origine
+		row_indices = np.repeat(np.arange(len(dist)), lengths)
+		all_ind = np.concatenate(ind)
+
+		# Aplatissement des distances et indices
+		all_thetas = np.concatenate(dist)
+		all_radii  = radii[row_indices]
+
+		all_ray_vectors = rayVectors[all_ind]                            # (total_pts, 3)
+
+		Ntot=all_ray_vectors.shape[0]
+
+		all_thetas=all_thetas.reshape((Ntot,1))
+		all_radii=all_radii.reshape((Ntot,1))
+
+		all_ray_points=self.points[all_ind] 
+		all_ray_vectors_norm=np.linalg.norm(all_ray_vectors,axis=1).reshape((Ntot,1))
+
+		all_query_vectors= queryVectors[row_indices]
+		all_query_points=query_points[row_indices]
+		all_query_vectors_norm=np.linalg.norm(all_query_vectors,axis=1).reshape((Ntot,1))
+		
+		all_query_points_variation=GRAD_T_query(all_query_points)
+
+		all_ray_points_variation=GRAD_T_obs(all_ray_points)
+
+		all_dists = all_thetas
+		
+		all_proj =  np.einsum('ij,ij->i',all_query_points_variation, 
+			all_ray_vectors*((all_ray_vectors_norm*all_query_vectors_norm)**(-1))-all_query_vectors*np.cos(all_thetas)*((all_query_vectors_norm)**(-2)))
+			
+		
+		all_proj += np.einsum('ij,ij->i',all_ray_points_variation, 
+			all_query_vectors*((all_query_vectors_norm*all_ray_vectors_norm)**(-1))-all_ray_vectors*np.cos(all_thetas)*((all_ray_vectors_norm)**(-2)))
+		
+
+		all_proj = all_proj.reshape((Ntot,1))
+		all_proj  = -all_proj*all_thetas*(np.sin(all_thetas)**(-1))
+
+
+		all_dists=all_dists.reshape(Ntot)
+		all_proj=all_proj.reshape(Ntot)
+
+		# ---- Reconstruction des matrices creuses ----
+
+		n_rows = query_points.shape[0]
+		n_cols = self.N
+
+		Mat = coo_matrix((all_dists, (row_indices, all_ind)), shape=(n_rows, n_cols))
+		Mat2 = coo_matrix((all_proj, (row_indices, all_ind)), shape=(n_rows, n_cols))
+
+		#print("Distance Matrix")
+		#print(Mat)
+
+		#print("variation vector")
+		#print(variation_vector)
+
+		#print("Pscal Matrix")
+		#print(Mat2)
+		
+		return {'dists':Mat,'pscal':Mat2}
 
 	def distRayMatrix(self,query_points,r):
 

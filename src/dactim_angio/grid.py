@@ -11,6 +11,7 @@ from scipy.ndimage import gaussian_filter
 import sys
 sys.path.append('../')
 import nibabel
+import json
 
 
 
@@ -172,16 +173,17 @@ class SpatialGridAffine(SpatialGrid):
 
 
 
-class SpatialGridPerspective(SpatialGridAffine):
+class SpatialGrid_XA(SpatialGridAffine):
 
-	def __init__(self,shape,affine,center,dat={}):
+	def __init__(self,shape,affine,center,metadata,dat={}):
 		assert(affine.shape[1]==3)
 		self.center=center
+		self.metadata=metadata
 		super().__init__(shape,affine,dat)
 
 	@classmethod
-	def fromNifti(cls,filename):
-		foo=nibabel.load(filename)
+	def fromNifti(cls,nifti_file,json_file):
+		foo=nibabel.load(nifti_file)
 		aff=foo.affine
 		
 		shape=foo.get_fdata().shape[:2]
@@ -193,72 +195,20 @@ class SpatialGridPerspective(SpatialGridAffine):
 		new_aff=np.zeros((4,3))
 		new_aff[:,:2]=aff[:,:2]
 		new_aff[:,2]=aff[:,3]
+		with open(json_file, 'r', encoding='utf-8') as f:
+			metadata = json.load(f)
 
-
-		center=v2*float(foo.header['descrip'])
+		center=v2*metadata['DistanceSourceToDetector']
 
 		data={}
 
 		for i in range(foo.get_fdata().shape[-1]):
 			data[i]=foo.get_fdata()[:,:,0,i]
 
-		return cls(shape,new_aff,center,data)
+		return cls(shape,new_aff,center,metadata,data)
 
 
 
-	@classmethod
-	def fromDicom(cls,filename):
-		dat=dcm.dcmread(filename)
-		ci=0.5*dat.pixel_array.shape[1]
-		cj=0.5*dat.pixel_array.shape[2]
-
-		affine=np.eye(3)
-		affine[0,2]=-ci
-		affine[1,2]=-cj
-		affine[2,2]=0
-
-		hi=float(dat.ImagerPixelSpacing[0])
-		hj=float(dat.ImagerPixelSpacing[1])
-
-		scale=np.eye(3)
-		scale[0,0]=-hi
-		scale[1,1]=-hj
-
-		affine=scale@affine
-		affine[2,2]=float(dat.DistanceSourceToDetector)-float(dat.DistanceSourceToPatient)
-
-		frontal=np.zeros((3,3))
-		frontal[2,0]=1
-		frontal[0,1]=1
-		frontal[1,2]=1
-
-		affine=frontal@affine
-
-		r = R.from_euler('xz', [dat.PositionerSecondaryAngle,dat.PositionerPrimaryAngle], degrees=True)
-
-		affine=r.as_matrix()@affine
-
-		aff=np.eye(4,3)
-		aff[:3,:]=affine
-		aff[3,2]=1
-
-		v0=aff[:3,0]/np.linalg.norm(aff[:3,0])
-		v1=aff[:3,1]/np.linalg.norm(aff[:3,1])
-		v2=-np.cross(v0,v1)
-
-		center=v2*dat.DistanceSourceToPatient
-
-		image=dat.pixel_array
-		image=image.astype('float')
-
-		image_dict={}
-		for i in range(image.shape[0]):
-			image_dict[i]=image[i,:,:]
-
-		foo=cls(image[0,:,:].shape,aff,center)
-
-		foo.dat=image_dict
-		return foo
 
 
 	
