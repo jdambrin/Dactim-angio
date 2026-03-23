@@ -8,12 +8,11 @@ import sys
 from scipy.spatial.transform import Rotation as R
 from abc import ABC, abstractmethod
 from scipy.ndimage import gaussian_filter
+from skimage.transform import pyramid_gaussian
 import sys
 sys.path.append('../')
 import nibabel
 import json
-
-
 
 
 class SpatialGrid(ABC):
@@ -61,27 +60,8 @@ class SpatialGrid(ABC):
 		return s
 
 	def copy(self):
-		
 		return copy.deepcopy(self)
 
-	def rescale(self,new_shape):
-
-		old=self.copy()
-
-		scale_factor=[(old.shape[i]-1)/(new_shape[i]-1) for i in range(len(old.shape))]
-
-		Mat=np.diag(scale_factor)
-
-		new_push=lambda I : old.push(np.tensordot(Mat,I,axes=(1,0)))
-		new_pull=lambda X : np.tensordot(np.linalg.inv(Mat),old.pull(X),axes=(1,0))
-
-		self.shape=new_shape
-		self.push=new_push
-		self.pull=new_pull
-		self.data={}.copy()
-
-		for f in old.dat:
-			self.transferScalarData(old,fieldName=f,fill_value=0)
 
 	def getMonotonicIndices(self):
 		return [np.linspace(0,n-1,n) for n in self.shape]
@@ -171,6 +151,67 @@ class SpatialGridAffine(SpatialGrid):
 		X=np.tensordot(inv_affine_inject,X,axes=(1,0))
 		return np.array([X[i] for i in range(len(self.shape))])
 
+	@classmethod
+	def build_pyramid(cls,old):
+		
+		dict_pyramid={}
+		
+		for key in old.dat:
+			dict_pyramid[key]=tuple(pyramid_gaussian(old.dat[key], downscale=2))
+			shapes=[im.shape for im in dict_pyramid[key]]
+
+		shape=shapes[0]
+		i=0
+		while(min(shape)>1):
+			i+=1
+			shape=shapes[i]
+
+		depth=i
+
+		res=[]
+
+		for i in range(depth-1):
+			new_shape=shapes[i]
+			scale_factor=[(old.shape[i]-1)/(new_shape[i]-1) for i in range(len(old.shape))]
+
+			Mat=np.diag(scale_factor)
+
+			dim=Mat.shape[0]
+
+			new_affine=np.zeros(old.affine.shape)
+			new_affine[:3,:dim] = old.affine[:3,:dim]@Mat
+			new_affine[:,-1] = old.affine[:,-1]
+
+			new=SpatialGridAffine(new_shape,new_affine)
+			for key in old.dat:
+				new.dat[key]=dict_pyramid[key][i]
+
+			res.append(new)
+
+		return res
+
+
+	@classmethod
+	def rescale(cls,old,new_shape):
+
+		scale_factor=[(old.shape[i]-1)/(new_shape[i]-1) for i in range(len(old.shape))]
+
+		Mat=np.diag(scale_factor)
+
+		dim=Mat.shape[0]
+
+		new_affine=np.zeros(old.affine.shape)
+
+		
+		new_affine[:3,:dim] = old.affine[:3,:dim]@Mat
+		new_affine[:,-1] = old.affine[:,-1]
+
+		new=SpatialGridAffine(new_shape,new_affine)
+
+		for f in old.dat:
+			new.transferScalarData(old,fieldName=f,fill_value=0)
+
+		return new
 
 
 class SpatialGrid_XA(SpatialGridAffine):
@@ -207,8 +248,67 @@ class SpatialGrid_XA(SpatialGridAffine):
 
 		return cls(shape,new_aff,center,metadata,data)
 
+	@classmethod
+	def rescale(cls,old,new_shape):
 
+		scale_factor=[(old.shape[i]-1)/(new_shape[i]-1) for i in range(len(old.shape))]
 
+		Mat=np.diag(scale_factor)
+
+		dim=Mat.shape[0]
+
+		new_affine=np.zeros(old.affine.shape)
+
+		
+		new_affine[:3,:dim] = old.affine[:3,:dim]@Mat
+		new_affine[:,-1] = old.affine[:,-1]
+
+		new=SpatialGrid_XA(new_shape,new_affine,old.center,old.metadata.copy())
+
+		for f in old.dat:
+			new.transferScalarData(old,fieldName=f,fill_value=0)
+
+		return new
+
+	@classmethod
+	def build_pyramid(cls,old):
+		
+		dict_pyramid={}
+		
+		for key in old.dat:
+			dict_pyramid[key]=tuple(pyramid_gaussian(old.dat[key], downscale=2))
+			shapes=[im.shape for im in dict_pyramid[key]]
+
+		shape=shapes[0]
+		i=0
+		while(min(shape)>1):
+			i+=1
+			shape=shapes[i]
+
+		depth=i
+
+		res=[]
+
+		for i in range(depth-1):
+			new_shape=shapes[i]
+			scale_factor=[(old.shape[i]-1)/(new_shape[i]-1) for i in range(len(old.shape))]
+
+			Mat=np.diag(scale_factor)
+
+			dim=Mat.shape[0]
+
+			new_affine=np.zeros(old.affine.shape)
+			new_affine[:3,:dim] = old.affine[:3,:dim]@Mat
+			new_affine[:,-1] = old.affine[:,-1]
+
+			new=SpatialGrid_XA(new_shape,new_affine,old.center,old.metadata.copy())
+
+			for key in old.dat:
+				new.dat[key]=dict_pyramid[key][i]
+
+			res.append(new)
+
+		return res
 
 
 	

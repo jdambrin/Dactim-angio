@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../')
+
 from dactim_angio.grid import SpatialGrid
 from dactim_angio.grid import SpatialGridAffine
 from dactim_angio.grid import SpatialGrid_XA
@@ -17,7 +17,7 @@ from dactim_angio.geom import kernel_r
 
 from dactim_angio.metrics import opposite_correlation
 from dactim_angio.metrics import blabla
-from dactim_angio.metrics import mutual_information_kernel
+from dactim_angio.metrics import opposite_mutual_information_kernel
 
 from scipy.spatial import KDTree
 from scipy.sparse import coo_array
@@ -36,6 +36,9 @@ import matplotlib.pyplot as plt
 
 import time
 
+from dactim_angio.sampler import Sampler
+
+
 times={}
 
 def measure_time(func):
@@ -43,152 +46,14 @@ def measure_time(func):
         tic = time.time()
         res = func(*args, **kwargs)
         toc = time.time()
-        print(f"[{func.__name__} finished in {toc-tic:.4f}s]")
-        print(times)
+        #print(f"[{func.__name__} finished in {toc-tic:.4f}s]")
+        #print(times)
         if func.__name__ not in times:
         	times[func.__name__] = 0
         times[func.__name__]+=toc-tic
         return res
     return new_func
 
-
-
-
-class Sampler():
-	def __init__(self,grid_xa,grid_tof,sigma_add,N_samples,xa_frame):
-		self.grid_xa=grid_xa
-		self.grid_tof=grid_tof
-		self.xa_frame=xa_frame
-		self.center=grid_xa.center
-
-		self.theta_x=0
-		self.theta_y=0
-		self.theta_z=0
-		self.sx=0
-		self.sy=0
-		self.sz=0
-
-		self.sigma_add=sigma_add
-
-		#dist_source_detector=np.linalg.norm(X_to_listpoints(grid_xa.getCoordinates())-grid_xa.center,axis=1).min()
-		dist_source_detector=np.linalg.norm(grid_xa.center)#+np.linalg.norm(points_xa_reduced,axis=1).min()
-
-		h_xa=grid_xa.getH().max()
-		step_angle_xa=0.5*np.asin(h_xa/dist_source_detector)
-
-		if(sigma_add>0):
-			rescale_factor_xa=sigma_add/h_xa
-			grid_xa_rescaled=grid_xa.copy()
-			grid_xa_rescaled.dat[xa_frame]=gaussian_filter(grid_xa.dat[xa_frame],rescale_factor_xa)
-			grid_xa_rescaled.rescale(tuple([int(n/rescale_factor_xa) for n in grid_xa.shape]))
-			h_xa=h_xa*rescale_factor_xa
-			step_angle_xa=0.5*np.asin(h_xa/dist_source_detector)
-		else:
-			grid_xa_rescaled=grid_xa.copy()
-
-
-		scalars_xa=grid_xa_rescaled.dat[xa_frame].flatten()
-		points_xa=X_to_listpoints(grid_xa_rescaled.getCoordinates())
-		sample_idx_xa=np.argwhere(grid_xa_rescaled.dat[xa_frame].flatten()>0.05*grid_xa_rescaled.dat[xa_frame].max()).flatten()
-		scalars_xa_reduced=scalars_xa[sample_idx_xa]
-		points_xa_reduced=points_xa[sample_idx_xa,:]
-		rays_xa=RayFan(grid_xa.center,points_xa_reduced)
-		self.scalar_xa_rays=GaussianRays(rays_xa,scalars_xa_reduced,step_angle_xa)
-	
-
-		h_tof=grid_tof.getH().max()
-
-		if(sigma_add>0):
-			rescale_factor_tof=0.5*sigma_add/h_tof
-			grid_tof_rescaled=grid_tof.copy()
-			grid_tof_rescaled.dat['1']=gaussian_filter(grid_tof.dat['1'],rescale_factor_tof)
-			grid_tof_rescaled.rescale(tuple([int(n/rescale_factor_tof) for n in grid_tof.shape]))
-			h_tof=h_tof*rescale_factor_tof
-		else:
-			grid_tof_rescaled=grid_tof.copy()
-
-
-		scalars_tof=grid_tof_rescaled.dat['1'].flatten()
-		points_tof=X_to_listpoints(grid_tof_rescaled.getCoordinates())
-
-		sample_idx_tof=np.argwhere(grid_tof_rescaled.dat['1'].flatten()>0.01*grid_tof_rescaled.dat['1'].max()).flatten()
-		scalars_tof_reduced=scalars_tof[sample_idx_tof]
-		points_tof_reduced=points_tof[sample_idx_tof,:]
-
-		self.scalar_tof_cloud=GaussianPoints(points_tof_reduced,scalars_tof_reduced,h_tof)
-	
-		self.N_samples=N_samples
-
-		#self.sample_points_xa=np.random.normal(0,self.sigma_add,(self.N_samples,3))+points_xa_reduced[np.random.choice(points_xa_reduced.shape[0],self.N_samples),:]
-		#self.sample_points_tof=np.random.normal(0,self.sigma_add,(self.N_samples,3))+points_tof_reduced[np.random.choice(points_tof_reduced.shape[0],self.N_samples),:]
-		
-		pdf_xa=scalars_xa_reduced/np.sum(scalars_xa_reduced)
-		pdf_tof=scalars_tof_reduced/np.sum(scalars_tof_reduced)
-
-		#self.N_samples=len(scalars_xa_reduced)
-
-		self.sample_points_xa=np.random.normal(0,h_xa,(self.N_samples,3))+points_xa_reduced[np.random.choice(points_xa_reduced.shape[0],self.N_samples),:]
-		self.sample_points_tof=np.random.normal(0,h_tof,(self.N_samples,3))+points_tof_reduced[np.random.choice(points_tof_reduced.shape[0],self.N_samples),:]
-		
-		self.sample_points_tof_init=self.sample_points_tof.copy()
-		self.scalar_tof_cloud_points_init=self.scalar_tof_cloud.points.copy()
-
-		#self.update_tof_points(self.theta_x,self.theta_y,self.theta_z,self.sx,self.sy,self.sz)
-
-		#plt.imshow(np.max(grid_tof_rescaled.dat['1'],axis=0))
-		#plt.show()
-
-	def sample(self):
-		sample_points=np.concatenate((self.sample_points_xa,self.sample_points_tof))
-		sample_rays=RayFan(self.center,sample_points)
-		#sample_scalar_xa=self.scalar_xa_rays.eval(sample_points,self.sigma_add_angle)
-		#sample_scalar_tof=self.scalar_tof_cloud.eval_rays(sample_rays,self.sigma_add)
-		sample_scalar_xa=self.scalar_xa_rays.eval(sample_points,0)
-		sample_scalar_tof=self.scalar_tof_cloud.eval_rays(sample_rays,0)
-		return sample_points,sample_scalar_xa,sample_scalar_tof
-
-	def euler_gradient_sample(self):
-		derivT=getAffineDerivatives(self.theta_x,self.theta_y,self.theta_z,self.sx,self.sy,self.sz)
-		T,Tinv=getAffine(self.theta_x,self.theta_y,self.theta_z,self.sx,self.sy,self.sz)
-		sample_points=np.concatenate((self.sample_points_xa,self.sample_points_tof))
-
-		sample_rays_xa=RayFan(self.center,self.sample_points_xa)
-		sample_rays_tof=RayFan(self.center,self.sample_points_tof)
-		
-		deriv_samples_wrt_tof=[]
-		deriv_samples_wrt_xa=[]
-		
-		for i in range(6):
-			deriv_xa_samples_wrt_tof=self.scalar_tof_cloud.eval_rays_shape_derivative(lambda x : applyAffine(derivT[i],applyAffine(Tinv,x)) , lambda x : 0*x, sample_rays_xa,0)
-			deriv_tof_samples_wrt_tof=self.scalar_tof_cloud.eval_rays_shape_derivative(lambda x : applyAffine(derivT[i],applyAffine(Tinv,x)) , lambda x : applyAffine(derivT[i],applyAffine(Tinv,x)), sample_rays_tof,0)
-			deriv_samples_wrt_tof.append(np.concatenate((deriv_xa_samples_wrt_tof,deriv_tof_samples_wrt_tof)))
-
-			deriv_xa_samples_wrt_xa=0*deriv_xa_samples_wrt_tof
-			deriv_tof_samples_wrt_xa=self.scalar_xa_rays.eval_shape_derivative(lambda x : 0*x , lambda x : applyAffine(derivT[i],applyAffine(Tinv,x)), sample_rays_tof,0)
-			deriv_samples_wrt_xa.append(np.concatenate((deriv_xa_samples_wrt_xa,deriv_tof_samples_wrt_xa)))
-
-		return deriv_samples_wrt_xa,deriv_samples_wrt_tof
-
-	def update_tof_points(self,theta_x,theta_y,theta_z,sx,sy,sz):
-		self.theta_x=theta_x
-		self.theta_y=theta_y
-		self.theta_z=theta_z
-		self.sx=sx
-		self.sy=sy
-		self.sz=sz
-		T=getAffine(theta_x,theta_y,theta_z,sx,sy,sz)[0]
-		self.sample_points_tof=applyAffine(T,self.sample_points_tof_init)
-		self.scalar_tof_cloud.points=applyAffine(T,self.scalar_tof_cloud_points_init)
-
-	def update_tof_points2(self,theta_x,theta_y,theta_z,sx,sy,sz):
-		self.theta_x=theta_x
-		self.theta_y=theta_y
-		self.theta_z=theta_z
-		self.sx=sx
-		self.sy=sy
-		self.sz=sz
-		T=getAffine(theta_x,theta_y,theta_z,sx,sy,sz)[0]
-		self.scalar_tof_cloud.points=applyAffine(T,self.scalar_tof_cloud_points_init)
 
 def load_data(path_xa,path_xa_metadata,path_tof,path_tof_segm,right):
 
@@ -459,9 +324,8 @@ if __name__=='__main__':
 	bounds_xa=(grid_xa.dat[xa_frame].min(),grid_xa.dat[xa_frame].max())
 	bounds_tof=(0,15)
 
-	validGradients_full_pipeline(grid_xa, grid_tof,xa_frame,mutual_information_kernel,metric_args_list=[bounds_xa,bounds_tof,50])
+	validGradients_full_pipeline(grid_xa, grid_tof,xa_frame,opposite_mutual_information_kernel,metric_args_list=[bounds_xa,bounds_tof,50])
 	#validGradients(grid_xa, grid_tof,xa_frame,opposite_correlation)
-	
 	#validGradients_sampler(grid_xa, grid_tof,xa_frame)
 
 	#x=multiScaleRegister(grid_xa, grid_tof,xa_frame,sigma_add=[16,8,4,2,0],Nsamples=[125,250,500,1000,2000],metric=opposite_correlation)

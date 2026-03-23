@@ -2,8 +2,9 @@ import numpy as np
 from scipy.spatial import KDTree
 from scipy.special import erf
 import matplotlib.pyplot as plt
+import warnings
 
-def opposite_correlation(x,y,args=[]):
+def opposite_correlation(x,y):
 	sx=np.sqrt(np.sum(x**2))
 	sy=np.sqrt(np.sum(y**2))
 	corr=np.sum(x*y)/(sx*sy)
@@ -11,18 +12,19 @@ def opposite_correlation(x,y,args=[]):
 	dxcorr=y/(sx*sy)-np.sum(x*y)*x/(sy*(sx**3))
 	return -corr,-dxcorr,-dycorr
 
-def blabla(x,y,args=[]):
+def blabla(x,y):
 	return np.sum(x**2)+np.sum(y**2),2*x,2*y
 
-def mutual_information_kernel(x,y,args=[(0,1),(0,1),50]):
-	bounds_x=args[0]
-	bounds_y=args[1]
-	bins=args[2]
+def opposite_mutual_information_kernel(x,y,bins=50,plot_hist=False):
 
-	print(bounds_x,bounds_y)
-	
-	x=(x-bounds_x[0])/(bounds_x[1]-bounds_x[0])
-	y=(y-bounds_y[0])/(bounds_y[1]-bounds_y[0])
+	warnings.filterwarnings("ignore")
+
+	scale_x=x.max()
+	scale_y=y.max()
+
+	x=x/scale_x
+	y=y/scale_y
+
 	
 	M=len(x)
 
@@ -33,7 +35,9 @@ def mutual_information_kernel(x,y,args=[(0,1),(0,1),50]):
 	[x_grid,y_grid]=np.meshgrid(0.5*(e[:-1]+e[1:]),0.5*(e[:-1]+e[1:]))
 
 	hgram=np.zeros((N,N))
+
 	Tree=KDTree(np.array([x,y]).T)
+
 	Nei=Tree.query_ball_point(np.array([x_grid.ravel(),y_grid.ravel()]).T,r=5*sigma)
 
 	for j in range(N):
@@ -46,16 +50,9 @@ def mutual_information_kernel(x,y,args=[(0,1),(0,1),50]):
 
 	pxy = hgram#/float(np.sum(hgram))
 
-	#plt.contourf(x_grid,y_grid,np.log(hgram).T)
-	#plt.scatter(x,y)
-	#plt.show()
-
-
 	px = np.sum(pxy, axis=1) # marginal for x over y
 	py = np.sum(pxy, axis=0) # marginal for y over x
 	px_py = px[:, None] * py[None, :] # Broadcast to multiply marginals
-	p_xx=px[:, None]*np.ones(len(py))[None,:]
-	p_yy=np.ones(len(px))[:,None]*py[None,:]
 
 	e22=e[:-1, None]*np.ones(len(e))[None,:-1]
 	e11=np.ones(len(e))[:-1,None]*e[None,:-1]
@@ -72,7 +69,6 @@ def mutual_information_kernel(x,y,args=[(0,1),(0,1),50]):
 
 	DU_I=np.zeros(M)
 	DV_I=np.zeros(M)
-	Dp_I=np.log(pxy[nzs]/px_py[nzs])-1
 
 	def expsq(t):
 		return np.exp(-t**2)
@@ -84,7 +80,10 @@ def mutual_information_kernel(x,y,args=[(0,1),(0,1),50]):
 	e22_ravel=e22.ravel()
 	e11p_ravel=e11p.ravel()
 	e22p_ravel=e22p.ravel()
-	Dp_I_ravel=(np.log(pxy.T)-np.log(px_py.T)-1).ravel()
+
+	#Dp_I_ravel=np.zeros(M**2)
+	#Dp_I_ravel[nzs_idx]=(np.log(pxy[nzs].T)-np.log(px_py[nzs].T)-1).ravel()
+	Dp_I_ravel = (np.log(pxy.T)-np.log(px_py.T)-1).ravel()
 
 	Tree2=KDTree(np.array([x_grid.ravel(),y_grid.ravel()]).T)
 
@@ -105,50 +104,58 @@ def mutual_information_kernel(x,y,args=[(0,1),(0,1),50]):
 
 	I=np.sum(pxy[nzs] * np.log(pxy[nzs] / px_py[nzs]))
 
-	return I,DU_I/(bounds_x[1]-bounds_x[0]),DV_I/(bounds_y[1]-bounds_y[0])
+	if plot_hist:
+		import matplotlib.pyplot as plt
+		plt.contourf(x_grid,y_grid,np.log(hgram).T)
+		plt.scatter(x,y)
+		plt.quiver(x,y,-DU_I,-DV_I)
+		plt.xlim([-0.1,1.1])
+		plt.ylim([-0.1,1.1])
+		plt.show()
+
+	return -I,-DU_I/scale_x,-DV_I/scale_y
 
 
-def joint_entropy_kraskov(x,y):
-	pass
+def joint_entropy_kraskov(x,y,k=5,epsilon=0.001):
+	x=x.flatten()
+	y=y.flatten()
+	Points=np.array([x,y]).T
+	tree=KDTree(Points)
+	d,i=tree.query(Points,k)
+	E=np.sum(np.log(d[:,1:]+epsilon))
+	grad_x_E=np.sum((np.repeat(np.array([x]).T,k-1,axis=1)-x[i[:,1:]])*(d[:,1:]+epsilon)**(-2),axis=1)
+	grad_y_E=np.sum((np.repeat(np.array([y]).T,k-1,axis=1)-y[i[:,1:]])*(d[:,1:]+epsilon)**(-2),axis=1)
+	return E,grad_x_E,grad_y_E
+
 
 def mutual_info_kraskov(x,y):
 	pass
 
 
-from scipy.optimize import check_grad
 
-if __name__ == '__main__':
+def singular_exclusion(x,y):
+	x=x.flatten()
+	y=y.flatten()
+	si=np.sum(np.exp(-(x**2)/0.1)+np.exp(-(y**2)/0.1))
+	si_x=-(2*x/0.1)*np.exp(-(x**2)/0.1)
+	si_y=-(2*y/0.1)*np.exp(-(y**2)/0.1)
+	return si, si_x, si_y
 
-	x0=np.random.rand(100)
-	y0=np.random.rand(100)
-
-	func_to_test=mutual_information_kernel
-
-	def func_x(x):
-		return func_to_test(x,y0)[0]
-	def grad_func_x(x):
-		return func_to_test(x,y0)[1]
-
-	def func_y(y):
-		return func_to_test(x0,y)[0]
-	def grad_func_y(y):
-		return func_to_test(x0,y)[2]
+def mse(x,y):
+	return np.sum((x-y)**2),2*(x-y),2*(y-x)
 
 
-	epsilons=[10**(-i) for i in range(3,11)]
-	err_grad_x=[]
-	for eps in epsilons:
-		err_grad_x.append(check_grad(func_x,grad_func_x,x0,epsilon=eps))
+if __name__ == "__main__":
+	x=np.random.rand(1000)
+	y=np.random.rand(1000)
+	h=0.001
+	for i in range(10000):
+		E,dxE,dyE=joint_entropy_kraskov(x,y,[10])
+		h=0.01/max(np.abs(dxE).max(),np.abs(dyE).max())
+		x=x-h*dxE
+		y=y-h*dyE
+		plt.scatter(x,y)
+		plt.quiver(x,y,dxE,dyE)
+		plt.show()
 
-	err_grad_y=[]
-	for eps in epsilons:
-		err_grad_y.append(check_grad(func_y,grad_func_y,y0,epsilon=eps))
 
-	plt.loglog(epsilons,err_grad_x,'.-')
-	plt.loglog(epsilons,err_grad_y,'.-')
-
-	plt.show()
-
-
-#def singular_exclusion(x,y):
-#	si=np.exp(-x^2/sx)+
