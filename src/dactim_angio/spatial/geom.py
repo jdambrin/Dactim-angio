@@ -40,7 +40,7 @@ def normalize(vectors):
     return vectors/norms
 
 class PointCloud():
-    def __init__(self,points,data={}):
+    def __init__(self,points):
         self.points=points
         self.N=points.shape[0]
         self.tree=KDTree(points)
@@ -75,12 +75,13 @@ def dist_rays_rays_matrix(gaussian_rays,gaussian_rays_other,r_angle_cut):
 
     # ---- Reconstruction des matrices creuses ----
 
-    n_rows = gaussian_rays_other.shape[0]
+    n_rows = gaussian_rays_other.N
     n_cols = gaussian_rays.N
 
     dist_mat = coo_matrix((all_dist, (row_indices, all_ind)), shape=(n_rows, n_cols))
 
     return dist_mat
+
 
 def dist_points_rays_matrix(point_cloud,ray_fan,r_angle_cut):
 

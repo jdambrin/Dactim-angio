@@ -2,17 +2,9 @@ import numpy as np
 import pyvista as pv
 from scipy.sparse.linalg import cg
 from scipy.sparse import coo_array
-from scipy.sparse import coo_matrix
-from scipy.sparse import lil_matrix
 from scipy import sparse
 
-from dactim_angio.geom import PointCloud,RayFan
-from dactim_angio.geom import dist_points_points_matrix
-from dactim_angio.geom import dist_rays_rays_matrix
-from dactim_angio.geom import dist_points_rays_matrix
-from dactim_angio.geom import d_points_dist_points_rays_matrix
-
-from dactim_angio.geom import cart2sphere
+from dactim_angio.spatial.geom import PointCloud, RayFan, dist_points_points_matrix, dist_rays_rays_matrix, dist_points_rays_matrix, d_points_dist_points_rays_matrix, cart2sphere
 
 
 def kernel_r(r,sigma):
@@ -82,6 +74,20 @@ class GaussianRBF():
         return d_point_eval_rays
 
 
+    def get_L2_H10_Matrices(self):
+
+        K_matrix=coo_array(self.point_cloud.tree.sparse_distance_matrix(self.point_cloud.tree,5*self.sigma))
+
+        L2Matrix=coo_array(0.5*np.sqrt(2)*K_matrix)
+        L2Matrix.data=(np.pi/8)*(self.sigma**2)*kernel_r(L2Matrix.data,self.sigma)
+
+        H10Matrix=coo_array(0.5*np.sqrt(2)*K_matrix)
+        H10Matrix.data=(np.pi/2)*(0.5*self.sigma**2-0.5*H10Matrix.data**2)*kernel_r(H10Matrix.data,self.sigma)
+
+        return L2Matrix,H10Matrix
+
+
+
 class GaussianRBF_rays():
     def __init__(self,ray_fan,sigma_angle,data={}):
         self.ray_fan=ray_fan
@@ -98,10 +104,19 @@ class GaussianRBF_rays():
 
         
     def eval(self,query_ray_fan,field):
-        dist=dist_rays_rays_matrix(self.ray_fan,query_ray_fan)
+        dist=dist_rays_rays_matrix(self.ray_fan,query_ray_fan,5*self.sigma_angle)
         K_matrix=coo_array(dist)
         K_matrix.data=kernel_r(K_matrix.data,self.sigma_angle)
         values=K_matrix@(self.weights[field])
+        return values
+
+    def eval_all(self,query_ray_fan):
+        dist=dist_rays_rays_matrix(self.ray_fan,query_ray_fan,5*self.sigma_angle)
+        K_matrix=coo_array(dist)
+        K_matrix.data=kernel_r(K_matrix.data,self.sigma_angle)
+        values={}
+        for key in self.data:
+            values[key]=K_matrix@(self.weights[key])
         return values
 
     def eval_shape_derivative(self,GRAD_T_points,GRAD_T_rays,ray_fan_data,sigma_angle_add=0):
@@ -115,4 +130,6 @@ class GaussianRBF_rays():
         scalar_data=self.eval(grid_scalar.points)
         grid_scalar.point_data[name] = scalar_data
         return grid_scalar
+
+
 

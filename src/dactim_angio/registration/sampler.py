@@ -1,17 +1,8 @@
-from dactim_angio.RBF import GaussianRBF
-from dactim_angio.geom import PointCloud
-from dactim_angio.geom import RayFan
-from dactim_angio.geom import X_to_listpoints
-from dactim_angio.geom import getAffineDerivatives
-from dactim_angio.geom import getAffine
-from dactim_angio.geom import applyAffine
-from skimage.morphology import disk, binary_dilation
-
+from dactim_angio.spatial.RBF import GaussianRBF
+from dactim_angio.spatial.geom import PointCloud, RayFan, X_to_listpoints, getAffineDerivatives, getAffine, applyAffine
 
 
 import numpy as np
-
-import matplotlib.pyplot as plt
 
 class Sampler_Simpler():
 	def __init__(self,grid_xa,grid_tof,field):
@@ -40,7 +31,6 @@ class Sampler_Simpler():
 		h_tof=grid_tof.getH().max()
 
 		grid_tof_rescaled=grid_tof.copy()
-
 		scalars_tof=grid_tof_rescaled.dat[field[1]].flatten()
 		points_tof=X_to_listpoints(grid_tof_rescaled.getCoordinates())
 
