@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Explorateur d’images patients</title>
+  <style>
+    :root{--bg:#0f172a;--panel:#111826;--muted:#94a3b8;--text:#e2e8f0;--accent:#22d3ee;--accent2:#7c3aed}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;background:linear-gradient(180deg,#0f172a,#0b1220);color:var(--text)}
+    .app{display:grid;grid-template-columns:320px 1fr;grid-template-rows:auto 1fr;min-height:100vh}
+    header{grid-column:1/-1;display:flex;gap:16px;align-items:center;padding:16px 20px;border-bottom:1px solid #243041;background:#0b1220;position:sticky;top:0;z-index:5}
+    header h1{font-size:18px;margin:0;font-weight:700;letter-spacing:.3px}
+    header .actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+    .hint{font-size:12px;color:var(--muted)}
+    .hint code{color:var(--accent);background:#0d1424;border:1px solid #243041;border-radius:6px;padding:1px 6px}
+
+    aside{border-right:1px solid #243041;background:rgba(17,24,38,.6);backdrop-filter:blur(6px);padding:14px;overflow:auto}
+    .search{display:flex;gap:8px;margin-bottom:10px}
+    .search input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid #2a364f;background:#0d1424;color:var(--text)}
+    .patients{display:flex;flex-direction:column;gap:6px}
+    .patient{border:1px solid #23304b;background:#0d1424;border-radius:12px;padding:10px 12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:transform .06s ease, border-color .2s}
+    .patient:hover{transform:translateY(-1px);border-color:#2f3d60}
+    .patient.active{outline:2px solid var(--accent)}
+    .badge{font-size:12px;color:#0b1220;background:linear-gradient(90deg,var(--accent),var(--accent2));padding:2px 8px;border-radius:999px}
+    .empty{opacity:.7;font-size:14px;padding:14px;line-height:1.5}
+    .empty code{color:var(--accent)}
+
+    main{padding:16px;display:grid;grid-template-rows:auto auto 1fr;gap:12px;overflow:hidden}
+    .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .toolbar > *{border:1px solid #243041;background:#0d1424;color:var(--text);padding:10px 12px;border-radius:10px}
+    .toolbar button{cursor:pointer}
+    .toolbar input[type="range"]{width:260px}
+    .toolbar .label{font-size:13px;color:var(--muted)}
+
+    .viewer{position:relative;border:1px solid #243041;background:#0d1424;border-radius:14px;height:65vh;display:flex;align-items:center;justify-content:center;overflow:auto}
+    .viewer img{max-width:100%;max-height:100%;object-fit:contain;transition:opacity .15s ease}
+    .filename{position:absolute;left:12px;bottom:10px;background:rgba(2,6,23,.7);padding:6px 10px;border-radius:8px;border:1px solid #1f2a44;font-size:12px;color:var(--muted)}
+
+    .row{display:flex;gap:8px;align-items:center}
+    .spacer{flex:1}
+
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-size:12px;border:1px solid #334155;border-bottom-width:3px;border-radius:6px;padding:2px 6px;background:#0b1220;color:var(--muted)}
+    a.link{color:var(--accent)}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Explorateur d’images patients</h1>
+    <div class="actions">
+      <div class="hint" id="sourceInfo">Dossier source : <code>…</code></div>
+    </div>
+  </header>
+
+  <aside>
+    <div class="search">
+      <input id="patientFilter" type="text" placeholder="Filtrer les patients… (ex: P001)" />
+    </div>
+    <div id="patients" class="patients">
+      <div class="empty">Chargement du dossier…</div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="toolbar">
+      <div id="currentPatient" class="label">Aucun patient sélectionné</div>
+      <div class="spacer"></div>
+      <button id="prevBtn" title="Image précédente (←)">◀</button>
+      <input id="frameSlider" type="range" min="0" max="0" value="0" disabled />
+      <button id="nextBtn" title="Image suivante (→)">▶</button>
+      <button id="playBtn" title="Lecture/Pause (espace)">Lecture</button>
+      <label class="row"><span class="label">fps</span><input id="fps" type="number" value="6" min="1" max="60" style="width:80px" /></label>
+      <label class="row"><input id="loop" type="checkbox" checked /> <span class="label">Boucle</span></label>
+      <label class="row"><input id="fit" type="checkbox" checked /> <span class="label">Ajuster à l’écran</span></label>
+    </div>
+
+    <div class="row" style="gap:14px">
+      <div class="label">Index :<span id="indexLabel">– / –</span></div>
+      <div class="label">Fichier :<span id="fileLabel">–</span></div>
+    </div>
+
+    <div class="viewer" id="viewer">
+      <img id="image" alt="Aucune image" />
+      <div class="filename" id="filename">—</div>
+    </div>
+
+    <div class="hint" style="margin-top:8px">Raccourcis : <span class="kbd">←/→</span> naviguer, <span class="kbd">Espace</span> lecture/pause.</div>
+  </main>
+</div>
+
+<script>
+(function(){
+  /* ============================================================
+   *  CONFIGURATION
+   *  ------------------------------------------------------------
+   *  basePath : chemin du dossier racine, RELATIF à ce fichier
+   *  index.html. Il doit contenir un sous-dossier par patient,
+   *  chaque sous-dossier contenant les images de la séquence.
+   *
+   *  Exemple d'arborescence attendue :
+   *    index.html
+   *    images-patients/
+   *      P001/  img_001.png  img_002.png ...
+   *      P002/  scan_01.jpg  scan_02.jpg ...
+   *
+   *  Deux modes de chargement (essayés dans cet ordre) :
+   *   1) Un fichier "manifest.json" placé dans basePath (le plus
+   *      fiable, marche même sans serveur configuré). Formats :
+   *        { "P001": ["img_001.png","img_002.png"], "P002": ["a.jpg"] }
+   *      ou bien la forme « liste de chemins » :
+   *        ["P001/img_001.png", "P002/a.jpg"]
+   *   2) À défaut de manifest, on lit l'index de dossier généré
+   *      par le serveur web (autoindex). Nécessite donc de servir
+   *      la page via http:// avec l'autoindex activé.
+   * ============================================================ */
+  const CONFIG = {
+    basePath: '../data/experiment3',
+    acceptedExtensions: ['.png', '.jpg', '.jpeg', '.gif', '.webp'],
+    crawlMaxDepth: 4, // profondeur max de descente dans un dossier patient
+  };
+
+  const patientsEl = document.getElementById('patients');
+  const filterInput = document.getElementById('patientFilter');
+  const imageEl = document.getElementById('image');
+  const fileNameOverlay = document.getElementById('filename');
+  const frameSlider = document.getElementById('frameSlider');
+  const indexLabel = document.getElementById('indexLabel');
+  const fileLabel = document.getElementById('fileLabel');
+  const currentPatientLabel = document.getElementById('currentPatient');
+  const sourceInfo = document.getElementById('sourceInfo');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const playBtn = document.getElementById('playBtn');
+  const fpsInput = document.getElementById('fps');
+  const loopInput = document.getElementById('loop');
+  const fitInput = document.getElementById('fit');
+
+  /* État global */
+  let groups = {};        // { patient: [{name, url, size?}, ...] }
+  let patientOrder = [];  // ordre d'affichage trié
+  let currentPatient = null;
+  let currentIndex = 0;
+  let playTimer = null;
+
+  sourceInfo.innerHTML = 'Dossier source : <code>' + escapeHtml(CONFIG.basePath) + '</code>';
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function naturalCompare(a, b){
+    return String(a).localeCompare(String(b), undefined, {numeric:true, sensitivity:'base'});
+  }
+
+  function isImage(name){
+    const lower = name.toLowerCase();
+    return CONFIG.acceptedExtensions.some(ext => lower.endsWith(ext));
+  }
+
+  function bytesToNice(n){
+    const u=['o','Ko','Mo','Go'];
+    let i=0; while(n>=1024&&i<u.length-1){n/=1024;i++}
+    return n.toFixed( (i?1:0) )+" "+u[i];
+  }
+
+  // Construit une URL absolue à partir de basePath + segments (chaque
+  // segment est encodé individuellement pour gérer espaces/accents).
+  function baseUrl(){
+    return new URL(CONFIG.basePath.replace(/\/?$/, '/'), location.href).href;
+  }
+  function joinUrl(base, relPath){
+    const encoded = String(relPath).split('/').map(encodeURIComponent).join('/');
+    return new URL(encoded, base).href;
+  }
+
+  /* ---------- Mode 1 : manifest.json ---------- */
+  async function tryManifest(){
+    const url = joinUrl(baseUrl(), 'manifest.json');
+    let res;
+    try { res = await fetch(url, {cache:'no-store'}); } catch { return null; }
+    if(!res.ok) return null;
+    let data;
+    try { data = await res.json(); } catch { return null; }
+
+    const base = baseUrl();
+    const result = {};
+
+    if(Array.isArray(data)){
+      for(const rel of data){
+        if(typeof rel !== 'string' || !isImage(rel)) continue;
+        const parts = rel.split('/').filter(Boolean);
+        const patient = parts.length > 1 ? parts[0] : '(Racine)';
+        const name = parts[parts.length - 1];
+        (result[patient] ||= []).push({ name, url: joinUrl(base, rel), sortKey: rel });
+      }
+    } else if(data && typeof data === 'object'){
+      for(const patient of Object.keys(data)){
+        const files = data[patient];
+        if(!Array.isArray(files)) continue;
+        for(const f of files){
+          if(typeof f !== 'string' || !isImage(f)) continue;
+          const rel = patient === '(Racine)' ? f : (patient + '/' + f);
+          const name = f.split('/').pop();
+          (result[patient] ||= []).push({ name, url: joinUrl(base, rel), sortKey: rel });
+        }
+      }
+    } else {
+      return null;
+    }
+
+    for(const p in result) result[p].sort((a,b)=> naturalCompare(a.sortKey, b.sortKey));
+    return Object.keys(result).length ? result : null;
+  }
+
+  /* ---------- Mode 2 : autoindex du serveur ---------- */
+  async function listDirectory(dirUrl){
+    const res = await fetch(dirUrl, {cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP ' + res.status + ' (' + dirUrl + ')');
+    const html = await res.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const base = new URL(dirUrl, location.href);
+    const basePathName = base.pathname.endsWith('/') ? base.pathname : base.pathname + '/';
+    const out = [];
+    const seen = new Set();
+    for(const a of doc.querySelectorAll('a[href]')){
+      const raw = a.getAttribute('href');
+      if(!raw || raw.startsWith('?') || raw.startsWith('#')) continue;
+      let u;
+      try { u = new URL(raw, base); } catch { continue; }
+      if(u.origin !== base.origin) continue;
+      const p = u.pathname;
+      if(!p.startsWith(basePathName)) continue;             // exclut parent / liens hors dossier
+      let rest = p.slice(basePathName.length).replace(/\/$/, '');
+      if(!rest || rest.includes('/')) continue;             // enfants directs uniquement
+      const name = decodeURIComponent(rest);
+      if(name.startsWith('.')) continue;
+      if(seen.has(name)) continue;
+      seen.add(name);
+      out.push({ name, isDir: p.endsWith('/'), url: u.href });
+    }
+    return out;
+  }
+
+  async function collectImages(dirUrl, depth){
+    if(depth > CONFIG.crawlMaxDepth) return [];
+    let entries;
+    try { entries = await listDirectory(dirUrl); } catch { return []; }
+    let imgs = entries
+      .filter(e => !e.isDir && isImage(e.name))
+      .map(e => ({ name: e.name, url: e.url, sortKey: decodeURIComponent(new URL(e.url).pathname) }));
+    for(const sub of entries.filter(e => e.isDir)){
+      imgs = imgs.concat(await collectImages(sub.url, depth + 1));
+    }
+    return imgs;
+  }
+
+  async function tryAutoindex(){
+    const base = baseUrl();
+    const top = await listDirectory(base); // peut throw → géré par l'appelant
+    const result = {};
+
+    const rootImgs = top
+      .filter(e => !e.isDir && isImage(e.name))
+      .map(e => ({ name: e.name, url: e.url, sortKey: decodeURIComponent(new URL(e.url).pathname) }));
+    if(rootImgs.length) result['(Racine)'] = rootImgs;
+
+    for(const d of top.filter(e => e.isDir)){
+      const imgs = await collectImages(d.url, 1);
+      if(imgs.length) result[d.name] = imgs;
+    }
+
+    for(const p in result) result[p].sort((a,b)=> naturalCompare(a.sortKey, b.sortKey));
+    return result;
+  }
+
+  /* ---------- Orchestration du chargement ---------- */
+  async function loadLibrary(){
+    patientsEl.innerHTML = '<div class="empty">Chargement du dossier…</div>';
+    try {
+      let lib = await tryManifest();
+      if(!lib){
+        lib = await tryAutoindex();
+      }
+      if(!lib || !Object.keys(lib).length){
+        showLoadError('Aucune image trouvée dans <code>' + escapeHtml(CONFIG.basePath) + '</code>.');
+        return;
+      }
+      groups = lib;
+      patientOrder = Object.keys(groups).sort(naturalCompare);
+      currentPatient = null; currentIndex = 0; stopPlay();
+      renderPatients();
+      if(patientOrder.length) selectPatient(patientOrder[0]);
+    } catch (err){
+      showLoadError(
+        'Impossible de lire le dossier <code>' + escapeHtml(CONFIG.basePath) + '</code>.<br><br>' +
+        'Vérifiez que la page est servie via un serveur web (http://) avec l’index de dossier ' +
+        'activé, ou ajoutez un fichier <code>manifest.json</code> dans ce dossier.<br>' +
+        '<span style="opacity:.7">Détail : ' + escapeHtml(err.message || String(err)) + '</span>'
+      );
+    }
+  }
+
+  function showLoadError(htmlMsg){
+    patientsEl.innerHTML = '<div class="empty">' + htmlMsg + '</div>';
+    currentPatientLabel.textContent = 'Aucun patient sélectionné';
+    updateControls();
+  }
+
+  /* ---------- Affichage liste patients ---------- */
+  function renderPatients(){
+    patientsEl.innerHTML = '';
+    const q = filterInput.value.trim().toLowerCase();
+    let any = false;
+    for(const name of patientOrder){
+      if(q && !name.toLowerCase().includes(q)) continue;
+      any = true;
+      const count = groups[name].length;
+      const div = document.createElement('div');
+      div.className = 'patient' + (name===currentPatient ? ' active' : '');
+      div.innerHTML = `<span>${escapeHtml(name)}</span><span class="badge">${count}</span>`;
+      div.addEventListener('click', ()=> selectPatient(name));
+      patientsEl.appendChild(div);
+    }
+    if(!any){
+      const none = document.createElement('div');
+      none.className='empty';
+      none.textContent = 'Aucun résultat.';
+      patientsEl.appendChild(none);
+    }
+  }
+
+  function selectPatient(name){
+    if(currentPatient === name) return;
+    currentPatient = name;
+    currentIndex = 0;
+    stopPlay();
+    updateControls();
+    renderPatients();
+    showFrame(0);
+  }
+
+  function updateControls(){
+    const len = currentPatient ? groups[currentPatient].length : 0;
+    frameSlider.max = Math.max(0, len-1);
+    frameSlider.value = currentIndex;
+    frameSlider.disabled = !len;
+    prevBtn.disabled = !len;
+    nextBtn.disabled = !len;
+    playBtn.disabled = len === 0;
+    currentPatientLabel.textContent = currentPatient ? `Patient : ${currentPatient} (${len} image${len>1?'s':''})` : 'Aucun patient sélectionné';
+  }
+
+  // Récupère la taille du fichier (lazy, via HEAD) et met à jour le label.
+  async function fillSize(entry, idxAtRequest){
+    if(entry.size != null) return;
+    try {
+      const r = await fetch(entry.url, {method:'HEAD'});
+      const len = r.headers.get('content-length');
+      if(len) entry.size = Number(len);
+    } catch {}
+    if(idxAtRequest === currentIndex && entry.size != null){
+      fileLabel.textContent = ` ${entry.name} (${bytesToNice(entry.size)})`;
+    }
+  }
+
+  function showFrame(i){
+    if(!currentPatient) return;
+    const arr = groups[currentPatient];
+    if(!arr || arr.length===0) return;
+    currentIndex = Math.max(0, Math.min(i, arr.length-1));
+    const entry = arr[currentIndex];
+    imageEl.style.opacity = 0.2;
+    imageEl.style.objectFit = fitInput.checked ? 'contain' : 'none';
+    imageEl.src = entry.url;
+    imageEl.onload = ()=> imageEl.style.opacity = 1;
+    imageEl.onerror = ()=> { imageEl.style.opacity = 1; imageEl.alt = 'Image introuvable : ' + entry.name; };
+    fileNameOverlay.textContent = entry.name;
+    indexLabel.textContent = ` ${currentIndex+1} / ${arr.length}`;
+    fileLabel.textContent = entry.size != null
+      ? ` ${entry.name} (${bytesToNice(entry.size)})`
+      : ` ${entry.name}`;
+    frameSlider.value = currentIndex;
+    if(entry.size == null) fillSize(entry, currentIndex);
+  }
+
+  function next(){
+    if(!currentPatient) return;
+    const arr = groups[currentPatient];
+    if(currentIndex < arr.length-1) showFrame(currentIndex+1);
+    else if(loopInput.checked) showFrame(0);
+  }
+  function prev(){
+    if(!currentPatient) return;
+    if(currentIndex>0) showFrame(currentIndex-1);
+    else if(loopInput.checked){
+      const len = groups[currentPatient].length;
+      showFrame(len-1);
+    }
+  }
+
+  function togglePlay(){
+    if(playTimer){ stopPlay(); return; }
+    if(!currentPatient || !groups[currentPatient].length) return;
+    const fps = Math.max(1, Math.min(60, Number(fpsInput.value)||6));
+    const interval = 1000 / fps;
+    playBtn.textContent = 'Pause';
+    playTimer = setInterval(()=>{
+      const before = currentIndex;
+      next();
+      if(before===currentIndex && !loopInput.checked){ stopPlay(); }
+    }, interval);
+  }
+  function stopPlay(){ if(playTimer){ clearInterval(playTimer); playTimer=null; } playBtn.textContent='Lecture'; }
+
+  /* ---------- Écouteurs UI ---------- */
+  frameSlider.addEventListener('input', ()=> showFrame(Number(frameSlider.value)) );
+  prevBtn.addEventListener('click', ()=>{ stopPlay(); prev(); });
+  nextBtn.addEventListener('click', ()=>{ stopPlay(); next(); });
+  playBtn.addEventListener('click', ()=> togglePlay());
+  fpsInput.addEventListener('change', ()=>{ if(playTimer){ stopPlay(); togglePlay(); } });
+  fitInput.addEventListener('change', ()=>{ if(currentPatient) showFrame(currentIndex); });
+  filterInput.addEventListener('input', ()=> renderPatients());
+
+  window.addEventListener('keydown', (e)=>{
+    if(e.target.matches('input,textarea')) return;
+    if(e.key==='ArrowRight'){ e.preventDefault(); stopPlay(); next(); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); stopPlay(); prev(); }
+    if(e.code==='Space'){ e.preventDefault(); togglePlay(); }
+  });
+
+  /* ---------- Démarrage ---------- */
+  updateControls();
+  loadLibrary();
+})();
+</script>
+</body>
+</html>
