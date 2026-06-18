@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Live PNG</title>
+    <style>
+      body { font-family: system-ui, sans-serif; }
+      img { max-width: 1200px; width: 100%; border: 1px solid #ccc; }
+    </style>
+  </head>
+  <body>
+    <h1>Figure mise à jour</h1>
+    <img id="live" src="live.png" alt="live" />
+
+    <script>
+      const img = document.getElementById("live");
+      function refresh() {
+        img.src = "live.png?t=" + Date.now(); // cache-buster
+      }
+      setInterval(refresh, 500); // ms, doit matcher ton time.sleep côté Python
+    </script>
+  </body>
+</html>

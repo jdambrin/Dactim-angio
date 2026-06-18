@@ -1,98 +1,183 @@
-from dactim_angio.metrics import opposite_mutual_information_kernel
-from dactim_angio.metrics import opposite_correlation
-from dactim_angio.metrics import singular_exclusion
-from dactim_angio.metrics import mse
-from dactim_angio.metrics import joint_entropy_kraskov
-
-from dactim_angio.grid import SpatialGridAffine
-from dactim_angio.grid import SpatialGrid_XA
-
-
-from dactim_angio.geom import getAffine
-
+from dactim_angio.spatial.geom import getAffine
 
 import numpy as np
-
-from preproc import load_data_raw,cleanDSA,maskBG
-from preproc import append_all_new
-
-
-from plotting import Envplotter
+from preproc import load_data_raw,cleanDSA,maskBG,select_all
 import json
+
 import os
+from collections import OrderedDict
+
+import pyvista as pv
+
+
 
 dict_tof_seg={'left_ica':1,'left_mca':2,'right_ica':3,'right_mca':4,'posterior':5,'anterior':6}
 
-datapath='/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/'
-path_xa_front=datapath+'dsa_raw_'+'front'+'_nifti_files/'
-path_xa_metadata_front=datapath+'dsa_raw_'+'front'+'_nifti_files/'
-		
-path_xa_sagit=datapath+'dsa_raw_'+'sagit'+'_nifti_files/'
-path_xa_metadata_sagit=datapath+'dsa_raw_'+'sagit'+'_nifti_files/'
-		
 
-path_tof=datapath+'tof_nifti_files/'
-path_tof_segm=datapath+'topcow_to_full_segmentation/'
+class Envplotter:
+    
 
-do_not_subtract=['Patient_45','Patient_46','Patient_47','Patient_48']
+    def __init__(self,grid_xa_front,grid_xa_sagit,grid_tof,affine_front = np.eye(4),affine_sagit = np.eye(4),max_xa_front=0,max_xa_sagit=0):
+
+        self.p = pv.Plotter(off_screen=True,shape=(1, 2),window_size=[2000, 1000])
+
+        grid_tof_plot_front=grid_tof.copy()
+        grid_tof_plot_sagit=grid_tof.copy()
+
+        grid_tof_plot_front.affine=affine_front@grid_tof_plot_front.affine
+        grid_tof_plot_sagit.affine=affine_sagit@grid_tof_plot_sagit.affine
+
+        self.grid_tof_pv_front = grid_tof_plot_front.toPyvista()
+        self.grid_tof_pv_sagit = grid_tof_plot_sagit.toPyvista()
+        self.grid_xa_pv_front = grid_xa_front.toPyvista()
+        self.grid_xa_pv_sagit = grid_xa_sagit.toPyvista()
+
+        self.cam1=pv.Camera()
+        self.cam1.position = tuple(grid_xa_front.center)
+        center1 = grid_xa_front.push(np.array([0.5 * grid_xa_front.shape[0], 0.5 * grid_xa_front.shape[1]]))
+        up1 = grid_xa_front.push(np.array([0, 0.5 * grid_xa_front.shape[1]])) - center1
+        dist1 = np.linalg.norm(center1-grid_xa_front.center)
+        angle1 = 2 * np.arctan(np.linalg.norm(up1) / dist1) * 180 / np.pi
+        self.cam1.focal_point = tuple(center1)
+        self.cam1.up = tuple(np.array(up1))
+        self.cam1.view_angle = angle1
+
+        self.cam2=pv.Camera()
+        self.cam2.position = tuple(grid_xa_sagit.center)
+        center2 = grid_xa_sagit.push(np.array([0.5 * grid_xa_sagit.shape[0], 0.5 * grid_xa_sagit.shape[1]]))
+        up2 = grid_xa_sagit.push(np.array([0, 0.5 * grid_xa_sagit.shape[1]])) - center2
+        dist2 = np.linalg.norm(center2-grid_xa_sagit.center)
+        angle2 = 2 * np.arctan(np.linalg.norm(up2) / dist2) * 180 / np.pi
+        self.cam2.focal_point = tuple(center2)
+        self.cam2.up = tuple(np.array(up2))
+        self.cam2.view_angle = angle2
+
+        self.max_xa_front=max_xa_front
+        self.max_xa_sagit=max_xa_sagit
 
 
-def makefigs():
 
 
-	result='experiment3.json'
+    def plot_xa_tof_with_sample_points_front_sagit(
+        self,out_file,field_xa
+    ):
+        self.p.clear()
+       
 
-	with open(result, "r", encoding="utf-8") as f:
-		data_register = json.load(f)
+        self.p.subplot(0, 0)
 
-	with open("./selected_arterial_frames.json", "r", encoding="utf-8") as f:
-		in_dict = json.load(f)
+        self.p.add_mesh(
+            self.grid_xa_pv_front, cmap="Reds", opacity="linear", scalars=field_xa, clim=[0,0.7*self.max_xa_front], show_scalar_bar=False
+        )
 
-	for p in data_register:
-	#for p in ['Patient_2']:
 
-		splitted=p.split('_')
+        self.p.add_mesh(
+            self.grid_tof_pv_front.contour(
+                [0.2*self.grid_tof_pv_front.point_data['selected'].max()], 
+                self.grid_tof_pv_front.point_data['selected']
+            ),
+            color="blue",
+            copy_mesh=True,
+            opacity=0.2,
+        )
 
-		patient_id=int(splitted[1])
+
+        self.p.add_mesh(
+            self.grid_tof_pv_front.contour(
+                [0.2*self.grid_tof_pv_front.point_data['both_sides'].max()], 
+                self.grid_tof_pv_front.point_data['both_sides']
+            ),
+            color="black",
+            copy_mesh=True,
+            opacity=0.1,
+        )
+
+        self.p.camera=self.cam1
+
+        self.p.subplot(0, 1)
+
+        self.p.add_mesh(
+            self.grid_xa_pv_sagit, cmap="Reds", opacity="linear", scalars=field_xa, clim=[0,0.7*self.max_xa_sagit], show_scalar_bar=False
+        )
+
+
+        self.p.add_mesh(
+            self.grid_tof_pv_sagit.contour(
+                [0.2*self.grid_tof_pv_sagit.point_data['selected'].max()], 
+                self.grid_tof_pv_sagit.point_data['selected']
+            ),
+            color="blue",
+            copy_mesh=True,
+            opacity=0.2,
+        )
+
+        self.p.add_mesh(
+            self.grid_tof_pv_sagit.contour(
+                [0.2*self.grid_tof_pv_sagit.point_data['both_sides'].max()], 
+                self.grid_tof_pv_sagit.point_data['both_sides']
+            ),
+            color="black",
+            copy_mesh=True,
+            opacity=0.1,
+        )
+
+        self.p.camera=self.cam2
+
+        #print('camera 2')
+        #print(self.p.camera)
+
+        self.p.screenshot(out_file)
+
+
+if __name__=='__main__':
+
+	with open("input_files_setup.json", "r", encoding="utf-8") as f:
+		in_dict = json.load(f, object_pairs_hook=OrderedDict)
+
+	with open("../../results/output.json", "r", encoding="utf-8") as f:
+		data_register = json.load(f, object_pairs_hook=OrderedDict)
+
+
+	patients=list(in_dict.keys())
+	print(patients)
+
+	for p in patients:
+
+		print(p)
 
 		patient_name=p
-
-
-		side=in_dict['Patient_'+str(patient_id)]['side']
-
-		file_xa_front=path_xa_front+patient_name+'.nii.gz'
-		file_xa_metadata_front=path_xa_metadata_front+patient_name+'_metadata.json'
 		
-		file_xa_sagit=path_xa_sagit+patient_name+'.nii.gz'
-		file_xa_metadata_sagit=path_xa_metadata_sagit+patient_name+'_metadata.json'
+		file_xa_front =          in_dict[patient_name]['front']['nifti_file']
+		file_xa_metadata_front = in_dict[patient_name]['front']['metadata']
 		
-		file_tof=path_tof+patient_name+'.nii.gz'
-		file_tof_segm=path_tof_segm+patient_name+'_CoW_seg.nii.gz'
-		side=in_dict[p]['side']
+		file_xa_sagit =          in_dict[patient_name]['sagit']['nifti_file']
+		file_xa_metadata_sagit = in_dict[patient_name]['sagit']['metadata']
+		
+		
+		file_tof=in_dict[patient_name]['tof_nifti_file']
+		file_tof_segm=in_dict[patient_name]['tof_segm_nifti_file']
 
-		xa_frame_ica_front=in_dict[p]['front']['ica_frame']
-		xa_frame_mca_front=in_dict[p]['front']['mca_frame']
+		side=in_dict[patient_name]['side']
 
-		xa_frame_ica_sagit=in_dict[p]['sagit']['ica_frame']
-		xa_frame_mca_sagit=in_dict[p]['sagit']['mca_frame']
+		xa_frame_mca_front=in_dict[patient_name]['front']['mca_frame']
+		xa_frame_mca_sagit=in_dict[patient_name]['sagit']['mca_frame']
+
+		cleanDSA_kwargs_front=in_dict[patient_name]['front']['cleanDSA_args']
+		cleanDSA_kwargs_sagit=in_dict[patient_name]['sagit']['cleanDSA_args']
 
 		grid_xa_front,grid_xa_sagit,grid_tof, grid_tof_segm =load_data_raw(file_xa_front,file_xa_metadata_front,file_xa_sagit,file_xa_metadata_sagit,file_tof,file_tof_segm)
-		
+
 		Nframes_front=len(grid_xa_front.dat)
 		Nframes_sagit=len(grid_xa_sagit.dat)
 
-		if p in do_not_subtract:
-			sub=False
-		else:
-			sub=True
-
-		grid_xa_front=cleanDSA(grid_xa_front,border_thickness=70,subtract=sub,first_index=0)
+		grid_xa_front=cleanDSA(grid_xa_front,**cleanDSA_kwargs_front)
 		grid_xa_front_mask=maskBG(grid_xa_front)
 
-		grid_xa_sagit=cleanDSA(grid_xa_sagit,border_thickness=70,subtract=sub,first_index=0)
+		grid_xa_sagit=cleanDSA(grid_xa_sagit,**cleanDSA_kwargs_sagit)
 		grid_xa_sagit_mask=maskBG(grid_xa_sagit)
 
-		grid_xa_front, grid_xa_sagit,grid_tof=append_all_new(grid_xa_front, grid_xa_front_mask,grid_xa_sagit, grid_xa_sagit_mask, grid_tof, grid_tof_segm, side, xa_frame_mca_front, xa_frame_mca_sagit)
+		grid_xa_front, grid_xa_sagit,grid_tof=select_all(grid_xa_front, grid_xa_front_mask,grid_xa_sagit, grid_xa_sagit_mask, grid_tof, grid_tof_segm, side, xa_frame_mca_front, xa_frame_mca_sagit)
+
 
 		
 
@@ -128,7 +213,7 @@ def makefigs():
 		correction_affine_sagit=getAffine(theta_x_sagit,theta_y_sagit,theta_z_sagit,shift_x_sagit,shift_y_sagit,shift_z_sagit)[0]
 		
 
-		dir_name=result.split('.')[0]
+		dir_name="../../results/output"
 
 		out_path=dir_name+'/'+p+'/'
 		
@@ -145,10 +230,6 @@ def makefigs():
 			out_file=out_path+'frame'+f'{i:05d}'+'.png'
 			envplotter.plot_xa_tof_with_sample_points_front_sagit(out_file,str(i))
 
-
-
-if __name__=='__main__':
-	makefigs()
 
 	
 

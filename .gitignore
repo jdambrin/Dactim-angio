@@ -55,5 +55,10 @@ htmlcov/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+_old/
+PIMISUTT/
+example/
+
+
 # pyenv
 # .python-version

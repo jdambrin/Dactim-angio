@@ -1,0 +1,21 @@
+{
+    "Patient_2": {
+        "front": {
+            "nifti_file": "../../data/example/post_thrombec_dsa_raw_front_nifti/Patient_2.nii.gz",
+            "metadata":   "../../data/example/post_thrombec_dsa_raw_front_nifti/Patient_2.json",
+            "mca_frame": 8,
+            "ica_frame": 6,
+            "cleanDSA_args": {"border_thickness":70}
+        },
+        "sagit": {
+            "nifti_file": "../../data/example/post_thrombec_dsa_raw_sagit_nifti/Patient_2.nii.gz",
+            "metadata":   "../../data/example/post_thrombec_dsa_raw_sagit_nifti/Patient_2.json",
+            "mca_frame": 7,
+            "ica_frame": 5,
+            "cleanDSA_args": {"border_thickness":70}
+        },
+        "side":"left",
+        "tof_nifti_file" :      "../../data/example/tof_nifti_files/Patient_2.nii.gz",
+        "tof_segm_nifti_file" : "../../data/example/topcow_to_full_segmentation/Patient_2_CoW_seg.nii.gz"
+    }
+}

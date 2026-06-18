@@ -1,0 +1,32 @@
+{
+    "Patient_2": {
+        "side": "left",
+        "file_tof": "../../data/example/tof_nifti_files/Patient_2.nii.gz",
+        "file_tof_segm": "../../data/example/topcow_to_full_segmentation/Patient_2_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -20.639794917371777,
+            "theta_y": 2.894920421660405,
+            "theta_z": 3.3491144278328364,
+            "shift_x": -2.416083982600477,
+            "shift_y": -49.17480558976977,
+            "shift_z": 0.3415159207212967,
+            "file_xa": "../../data/example/post_thrombec_dsa_raw_front_nifti/Patient_2.nii.gz",
+            "file_xa_metadata": "../../data/example/post_thrombec_dsa_raw_front_nifti/Patient_2.json"
+        },
+        "sagit": {
+            "theta_x": -20.708762489777346,
+            "theta_y": 3.633191252394233,
+            "theta_z": 4.733970745390658,
+            "shift_x": -167.69235505138295,
+            "shift_y": 20.12814394175231,
+            "shift_z": -7.196331991810573,
+            "file_xa": "../../data/example/post_thrombec_dsa_raw_sagit_nifti/Patient_2.nii.gz",
+            "file_xa_metadata": "../../data/example/post_thrombec_dsa_raw_sagit_nifti/Patient_2.json"
+        }
+    }
+}

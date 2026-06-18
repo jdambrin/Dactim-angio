@@ -1,14 +1,13 @@
 from dactim_angio.metrics import opposite_correlation
-from dactim_angio.grid import SpatialGridAffine
-from dactim_angio.grid import SpatialGrid_XA
+from dactim_angio.spatial.grid import SpatialGridAffine
+from dactim_angio.spatial.grid import SpatialGrid_XA
+
 from scipy.optimize import minimize
 import numpy as np
 import time
-from dactim_angio.sampler import Sampler_Simpler
-from preproc import load_data_raw,cleanDSA,maskBG
-from preproc import append_all_new
+from utils import Sampler_Simpler, Monitor, appendJson
+from preproc import load_data_raw,cleanDSA,maskBG,select_all
 import json
-import os
 
 import matplotlib.pyplot as plt
 import matplotlib
@@ -16,21 +15,8 @@ matplotlib.use("Agg")
 
 from collections import OrderedDict
 
-datapath='/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/'
-path_xa_front=datapath+'dsa_raw_'+'front'+'_nifti_files/'
-path_xa_metadata_front=datapath+'dsa_raw_'+'front'+'_nifti_files/'
-		
-path_xa_sagit=datapath+'dsa_raw_'+'sagit'+'_nifti_files/'
-path_xa_metadata_sagit=datapath+'dsa_raw_'+'sagit'+'_nifti_files/'
-		
-
-path_tof=datapath+'tof_nifti_files/'
-path_tof_segm=datapath+'topcow_to_full_segmentation/'
-
 
 times={}
-
-do_not_subtract=['Patient_45','Patient_46','Patient_47','Patient_48']
 
 def measure_time(func):
     def new_func(*args, **kwargs):
@@ -45,146 +31,12 @@ def measure_time(func):
         return res
     return new_func
 
-
-
-class Monitor:
-	def __init__(self,sampler_front,sampler_sagit,x0,components,out_png):
-
-
-		self.out_png=out_png
-		self.tmp_png = out_png + ".tmp"
-
-		self.x0=x0
-		self.components=components
-
-		self.sampler_front=sampler_front
-		self.sampler_sagit=sampler_sagit
-
-		self.tabit=[0]
-		self.taby=[x0]
-
-		fig, ax = plt.subplots(2,3,figsize=(15,10))
-
-		self.lines=[]
-		names=[r"$\theta_x^f$",r"$\theta_y^f$",r"$\theta_z^f$","$s_x^f$","$s_y^f$","$s_z^f$",
-			r"$\theta_x^s$",r"$\theta_y^s$",r"$\theta_z^s$","$s_x^s$","$s_y^s$","$s_z^s$"]
-		for i in range(12):
-			(line,) = ax[0,0].plot([], [], label=names[i])
-			self.lines.append(line)
-
-		self.tabfun=[]
-		(self.line_fun,)=ax[1,0].plot([], [], label=names[i])
-
-		# Labels dynamiques
-		self.labels = []
-		for i in range(12):
-			txt = ax[0,0].text(0, 0, names[i], color=self.lines[i].get_color(), fontsize=8)
-			self.labels.append(txt)
-
-
-		self.scatter_front_modulus = ax[0,1].scatter([], [],alpha=0.1)
-		self.scatter_sagit_modulus = ax[0,2].scatter([], [],alpha=0.1)
-
-		self.xa_front_shape=self.sampler_front.grid_xa.shape
-		self.xa_sagit_shape=self.sampler_sagit.grid_xa.shape
-
-
-		self.im_front_xa=ax[1,1].imshow(np.zeros(self.xa_front_shape),cmap='Reds',alpha=0.5)
-		self.im_front_tof=ax[1,1].imshow(np.zeros(self.xa_front_shape),cmap='Blues',alpha=0.5)
-
-		self.im_sagit_xa=ax[1,2].imshow(np.zeros(self.xa_sagit_shape),cmap='Reds',alpha=0.5)
-		self.im_sagit_tof=ax[1,2].imshow(np.zeros(self.xa_sagit_shape),cmap='Blues',alpha=0.5)
-
-		#self.scatter_front_points_xa= ax[1,1].scatter([], [],color='red',marker='.',s=s)
-		#self.scatter_front_points_tof= ax[1,1].scatter([], [],color='blue',marker='.',s=s)
-
-		#self.scatter_sagit_points_xa= ax[1,2].scatter([], [],color='red',marker='.',s=s)
-		#self.scatter_sagit_points_tof= ax[1,2].scatter([], [],color='blue',marker='.',s=s)
-
-		self.fig=fig
-		self.ax=ax
-
-	@measure_time
-	def update_monitor(self,intermediate_result):
-
-		x=intermediate_result.x
-		fun=intermediate_result.fun
-
-
-		y=self.x0+self.components@x
-
-		sample_points_front,sample_scalar_xa_front,sample_scalar_tof_front = self.sampler_front.sample()
-		sample_points_sagit,sample_scalar_xa_sagit,sample_scalar_tof_sagit = self.sampler_sagit.sample()
-
-		self.scatter_front_modulus.set_offsets(list(zip(sample_scalar_xa_front, sample_scalar_tof_front)))		
-		self.scatter_sagit_modulus.set_offsets(list(zip(sample_scalar_xa_sagit, sample_scalar_tof_sagit)))
-
-		self.im_front_xa.set_data(np.reshape(sample_scalar_xa_front,self.xa_front_shape))
-		self.im_front_tof.set_data(np.reshape(sample_scalar_tof_front,self.xa_front_shape))
-
-		self.im_front_xa.set_clim(vmin=0, vmax=np.percentile(sample_scalar_xa_front,99))
-		self.im_front_tof.set_clim(vmin=0, vmax=np.percentile(sample_scalar_tof_front,99))
-
-		self.im_sagit_xa.set_data(np.reshape(sample_scalar_xa_sagit,self.xa_sagit_shape))
-		self.im_sagit_tof.set_data(np.reshape(sample_scalar_tof_sagit,self.xa_sagit_shape))
-
-		self.im_sagit_xa.set_clim(vmin=0, vmax=np.percentile(sample_scalar_xa_sagit,99))
-		self.im_sagit_tof.set_clim(vmin=0, vmax=np.percentile(sample_scalar_tof_sagit,99))
-
-
-		self.taby.append(y)
-		self.tabfun.append(fun)
-		self.tabit.append(self.tabit[-1]+1)
-		
-		for i in range(12):
-			self.lines[i].set_xdata(self.tabit)
-			self.lines[i].set_ydata(np.array(self.taby)[:,i])
-			self.labels[i].set_position((self.tabit[-1], self.taby[-1][i]))
-
-		self.line_fun.set_xdata(self.tabit[1:])
-		self.line_fun.set_ydata(self.tabfun)
-
-
-		self.ax[0,0].relim()             # Recalcule les limites
-		self.ax[0,0].autoscale_view()
-		self.ax[1,0].relim()             # Recalcule les limites
-		self.ax[1,0].autoscale_view()
-
-		max_front_tof=sample_scalar_tof_front.max()
-		max_front_xa=sample_scalar_xa_front.max()
-
-		max_sagit_tof=sample_scalar_tof_sagit.max()
-		max_sagit_xa=sample_scalar_xa_sagit.max()
-
-
-		self.ax[0,1].set_xlim(0,max_front_xa)           
-		self.ax[0,1].set_ylim(0,max_front_tof)           
- 
-		self.ax[0,2].set_xlim(0,max_sagit_xa)           
-		self.ax[0,2].set_ylim(0,max_sagit_tof)    
-
-		self.fig.savefig(self.tmp_png,format="png", dpi=120)
-		os.replace(self.tmp_png, self.out_png)		
-
-def appendJson(json_file,entry_name,data_to_keep):
-
-	if os.path.exists(json_file):
-		with open(json_file, "r", encoding="utf-8") as f:
-			data = json.load(f)
-	else:
-		data={}
-	
-	# Met à jour si existe, sinon ajoute
-	data[entry_name] = data_to_keep
-
-	# Sauvegarder
-	with open(json_file, "w", encoding="utf-8") as f:
-		json.dump(data, f, indent=4, ensure_ascii=False)
+#do_not_subtract=['Patient_45','Patient_46','Patient_47','Patient_48']
 
 @measure_time
 def register(grid_xa_front,grid_xa_sagit, grid_tof,components,x0,metric):
 
-	field=('all','all')
+	field=('selected','selected')
 
 	dim = components.shape[1]
 
@@ -247,7 +99,6 @@ def register(grid_xa_front,grid_xa_sagit, grid_tof,components,x0,metric):
 		return gradf
 
 
-
 	mySampler_front=Sampler_Simpler(grid_xa_front,grid_tof,field)
 	mySampler_front.update_tof_points(x0[0],x0[1],x0[2],x0[3],x0[4],x0[5])
 
@@ -257,7 +108,7 @@ def register(grid_xa_front,grid_xa_sagit, grid_tof,components,x0,metric):
 	sample_points_front,sample_scalar_xa_front,sample_scalar_tof_front=mySampler_front.sample()
 
 
-	myMonitor = Monitor(mySampler_front,mySampler_sagit,x0,components,'Monitoring/live.png')
+	myMonitor = Monitor(mySampler_front,mySampler_sagit,x0,components,'_monitoring/live.png')
 
 	def cb(intermediate_result):
 		myMonitor.update_monitor(intermediate_result)
@@ -310,51 +161,49 @@ def multiScaleRegister(grid_xa_front, grid_xa_sagit, grid_tof,levels,components,
 
 if __name__=='__main__':
 
-	out_json_file='experiment3.json'
+	out_json_file='../../results/output.json'
 
-	with open("selected_arterial_frames.json", "r", encoding="utf-8") as f:
+	with open("input_files_setup.json", "r", encoding="utf-8") as f:
 		in_dict = json.load(f, object_pairs_hook=OrderedDict)
 
 
 	patients=list(in_dict.keys())
 	print(patients)
 
-	#for p in patients[10:]:
-	#for p in list(in_dict.keys())[3:]:
-	for p in ['Patient_52']:
-	#for p in patients:
+	for p in patients:
+
 		print(p)
 
 		patient_name=p
+		
+		file_xa_front =          in_dict[patient_name]['front']['nifti_file']
+		file_xa_metadata_front = in_dict[patient_name]['front']['metadata']
+		
+		file_xa_sagit =          in_dict[patient_name]['sagit']['nifti_file']
+		file_xa_metadata_sagit = in_dict[patient_name]['sagit']['metadata']
+		
+		
+		file_tof=in_dict[patient_name]['tof_nifti_file']
+		file_tof_segm=in_dict[patient_name]['tof_segm_nifti_file']
 
-		file_xa_front=path_xa_front+patient_name+'.nii.gz'
-		file_xa_metadata_front=path_xa_metadata_front+patient_name+'_metadata.json'
-		
-		file_xa_sagit=path_xa_sagit+patient_name+'.nii.gz'
-		file_xa_metadata_sagit=path_xa_metadata_sagit+patient_name+'_metadata.json'
-		
-		file_tof=path_tof+patient_name+'.nii.gz'
-		file_tof_segm=path_tof_segm+patient_name+'_CoW_seg.nii.gz'
-		
 		side=in_dict[patient_name]['side']
 
 		xa_frame_mca_front=in_dict[patient_name]['front']['mca_frame']
 		xa_frame_mca_sagit=in_dict[patient_name]['sagit']['mca_frame']
-		
+
+		cleanDSA_kwargs_front=in_dict[patient_name]['front']['cleanDSA_args']
+		cleanDSA_kwargs_sagit=in_dict[patient_name]['sagit']['cleanDSA_args']
+
 		grid_xa_front,grid_xa_sagit,grid_tof, grid_tof_segm =load_data_raw(file_xa_front,file_xa_metadata_front,file_xa_sagit,file_xa_metadata_sagit,file_tof,file_tof_segm)
 
-		if p in do_not_subtract:
-			sub=False
-		else:
-			sub=True
 
-		grid_xa_front=cleanDSA(grid_xa_front,border_thickness=70,subtract=sub,first_index=0)
+		grid_xa_front=cleanDSA(grid_xa_front,**cleanDSA_kwargs_front)
 		grid_xa_front_mask=maskBG(grid_xa_front)
 
-		grid_xa_sagit=cleanDSA(grid_xa_sagit,border_thickness=70,subtract=sub,first_index=0)
+		grid_xa_sagit=cleanDSA(grid_xa_sagit,**cleanDSA_kwargs_sagit)
 		grid_xa_sagit_mask=maskBG(grid_xa_sagit)
 
-		grid_xa_front, grid_xa_sagit,grid_tof=append_all_new(grid_xa_front, grid_xa_front_mask,grid_xa_sagit, grid_xa_sagit_mask, grid_tof, grid_tof_segm, side, xa_frame_mca_front, xa_frame_mca_sagit)
+		grid_xa_front, grid_xa_sagit,grid_tof=select_all(grid_xa_front, grid_xa_front_mask,grid_xa_sagit, grid_xa_sagit_mask, grid_tof, grid_tof_segm, side, xa_frame_mca_front, xa_frame_mca_sagit)
 
 
 		Nframes_front=len(grid_xa_front.dat)

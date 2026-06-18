@@ -229,17 +229,14 @@ class SpatialGrid_XA(SpatialGridAffine):
 		
 		shape=foo.get_fdata().shape[:2]
 
-		v0=aff[:3,0]/np.linalg.norm(aff[:3,0])
-		v1=aff[:3,1]/np.linalg.norm(aff[:3,1])
-		v2=-np.cross(v0,v1)
-
 		new_aff=np.zeros((4,3))
 		new_aff[:,:2]=aff[:,:2]
 		new_aff[:,2]=aff[:,3]
+
 		with open(json_file, 'r', encoding='utf-8') as f:
 			metadata = json.load(f)
 
-		center=v2*metadata['DistanceSourceToDetector']
+		center=np.array(metadata['center'])
 
 		data={}
 
