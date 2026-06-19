@@ -62,3 +62,4 @@ example/
 
 # pyenv
 # .python-version
+generate_manifest.py
