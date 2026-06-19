@@ -1,0 +1,1283 @@
+{
+    "Patient_5": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_5.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_5_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -0.694482422899643,
+            "theta_y": -2.397164993324807,
+            "theta_z": 6.134796888352765,
+            "shift_x": -2.02046480154613,
+            "shift_y": -62.36888006444742,
+            "shift_z": -31.157463532592303,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_5.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_5_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_5_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -1.042209459789253,
+            "theta_y": -1.2987438531412907,
+            "theta_z": 8.145722950236971,
+            "shift_x": -139.03274726132804,
+            "shift_y": 10.900657632074344,
+            "shift_z": -34.609789807051456,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_5.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_5_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_5_metadata.json"
+        }
+    },
+    "Patient_2": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_2.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_2_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -20.642292012828555,
+            "theta_y": 2.895717947890261,
+            "theta_z": 3.358665091031378,
+            "shift_x": -2.414147272097585,
+            "shift_y": -49.26604210756765,
+            "shift_z": 0.3437616177449502,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_2.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_2_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_2_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -20.708960853404704,
+            "theta_y": 3.63297843085313,
+            "theta_z": 4.734237533535291,
+            "shift_x": -167.6925555547073,
+            "shift_y": 20.128620149007187,
+            "shift_z": -7.196096133093118,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_2.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_2_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_2_metadata.json"
+        }
+    },
+    "Patient_6": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_6.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_6_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -10.189714415935315,
+            "theta_y": -0.4273114272909551,
+            "theta_z": -8.705004837625992,
+            "shift_x": 5.786946256052574,
+            "shift_y": -91.08834528372338,
+            "shift_z": -38.78402176763082,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_6.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_6_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_6_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -12.065029488757157,
+            "theta_y": -0.8224211850467491,
+            "theta_z": -9.982669052293744,
+            "shift_x": -74.13454163602475,
+            "shift_y": 2.556692052178027,
+            "shift_z": -33.93722875208544,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_6.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_6_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_6_metadata.json"
+        }
+    },
+    "Patient_8": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_8.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_8_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -3.705776026513552,
+            "theta_y": -10.937574346222686,
+            "theta_z": -4.179706960620888,
+            "shift_x": 2.8000109956182553,
+            "shift_y": -129.1392141219686,
+            "shift_z": -3.157851756435218,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_8.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_8_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_8_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -3.660013094114443,
+            "theta_y": -10.326575415485953,
+            "theta_z": -2.1505579507303882,
+            "shift_x": -152.053124575923,
+            "shift_y": -9.897686732821272,
+            "shift_z": 17.419653456205356,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_8.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_8_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_8_metadata.json"
+        }
+    },
+    "Patient_10": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_10.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_10_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -4.946044315148366,
+            "theta_y": 4.994835419869331,
+            "theta_z": -6.340776993919009,
+            "shift_x": 5.245310366515802,
+            "shift_y": -114.2273347830753,
+            "shift_z": -7.792164007745396,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_10.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_10_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_10_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -6.531735458578759,
+            "theta_y": 6.716532327800564,
+            "theta_z": -9.544578849428893,
+            "shift_x": -92.16952910644035,
+            "shift_y": 11.22318515019656,
+            "shift_z": -32.31405533522822,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_10.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_10_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_10_metadata.json"
+        }
+    },
+    "Patient_12": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_12.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_12_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -15.002931683579288,
+            "theta_y": -0.483581189277717,
+            "theta_z": 13.406567623740294,
+            "shift_x": -15.325052625465942,
+            "shift_y": -108.31231311839547,
+            "shift_z": -6.462023733137216,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_12.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_12_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_12_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -15.546059118587701,
+            "theta_y": -0.4589191016684207,
+            "theta_z": 14.959473985318215,
+            "shift_x": -105.29846934049102,
+            "shift_y": 4.337791920109149,
+            "shift_z": 2.9334087654300336,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_12.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_12_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_12_metadata.json"
+        }
+    },
+    "Patient_13": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_13.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_13_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -13.683272392865346,
+            "theta_y": 0.2557649936626871,
+            "theta_z": -3.2107817844578155,
+            "shift_x": 11.545351961632035,
+            "shift_y": -70.69427330806494,
+            "shift_z": -4.074055036467574,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_13.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_13_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_13_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -15.011084133592098,
+            "theta_y": 0.19217781873444548,
+            "theta_z": -4.3847221032428365,
+            "shift_x": -168.31204407679243,
+            "shift_y": -2.0578086784459915,
+            "shift_z": -0.6985128697986338,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_13.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_13_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_13_metadata.json"
+        }
+    },
+    "Patient_14": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_14.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_14_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -16.705364619559987,
+            "theta_y": 0.81585552031698,
+            "theta_z": 6.879746849334851,
+            "shift_x": 4.689369384880731,
+            "shift_y": -43.22247784105502,
+            "shift_z": 11.689406288659589,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_14.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_14_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_14_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -18.46798379545259,
+            "theta_y": 1.8241499144031446,
+            "theta_z": 8.264210539807644,
+            "shift_x": -83.47388192483963,
+            "shift_y": 25.70713266267765,
+            "shift_z": 5.124700991361717,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_14.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_14_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_14_metadata.json"
+        }
+    },
+    "Patient_15": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_15.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_15_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -2.6198977176737364,
+            "theta_y": 1.0382698383607427,
+            "theta_z": -0.39852622892072764,
+            "shift_x": -0.3450519488244353,
+            "shift_y": -49.45476859440353,
+            "shift_z": 2.9332003155541813,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_15.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_15_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_15_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -5.085766519624056,
+            "theta_y": 1.8103663771969996,
+            "theta_z": 0.5868279215113659,
+            "shift_x": -182.93951233251346,
+            "shift_y": 5.140044374084329,
+            "shift_z": 17.01542606382948,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_15.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_15_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_15_metadata.json"
+        }
+    },
+    "Patient_16": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_16.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_16_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -2.423670370543059,
+            "theta_y": -6.2667084488575835,
+            "theta_z": 4.419851109500247,
+            "shift_x": -0.5366891877735188,
+            "shift_y": -11.200737084338925,
+            "shift_z": 35.22511597383792,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_16.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_16_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_16_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -7.511912591934258,
+            "theta_y": -6.194583109560548,
+            "theta_z": 1.7725699658693184,
+            "shift_x": -149.5239228949224,
+            "shift_y": 25.24431880133498,
+            "shift_z": 30.39872792013439,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_16.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_16_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_16_metadata.json"
+        }
+    },
+    "Patient_17": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_17.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_17_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -15.072666680956406,
+            "theta_y": -4.780078744431307,
+            "theta_z": 22.009643978967084,
+            "shift_x": 1.277084605076894,
+            "shift_y": -47.22173318419321,
+            "shift_z": 2.787831716567956,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_17.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_17_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_17_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -19.193423080582587,
+            "theta_y": -4.346336004996235,
+            "theta_z": 23.30477008813518,
+            "shift_x": -145.06433471578447,
+            "shift_y": -11.597893061708366,
+            "shift_z": 1.867931397705557,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_17.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_17_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_17_metadata.json"
+        }
+    },
+    "Patient_18": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_18.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_18_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": 0.0645651922266269,
+            "theta_y": -2.616178171956875,
+            "theta_z": -0.2650357232496534,
+            "shift_x": -3.728618654441204,
+            "shift_y": -16.427965505629132,
+            "shift_z": -4.316965753256219,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_18.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_18_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_18_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -2.6472591916655186,
+            "theta_y": 8.228582481933895,
+            "theta_z": 2.607910720116771,
+            "shift_x": -88.38429296660954,
+            "shift_y": 19.32547268426578,
+            "shift_z": 16.436089846607643,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_18.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_18_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_18_metadata.json"
+        }
+    },
+    "Patient_21": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_21.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_21_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -15.435218219102998,
+            "theta_y": -11.273721663997645,
+            "theta_z": 3.138711952526232,
+            "shift_x": -0.39323395803057615,
+            "shift_y": -56.766236224109925,
+            "shift_z": 5.53661178307904,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_21.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_21_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_21_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -15.967627721658385,
+            "theta_y": -11.158357897532092,
+            "theta_z": 3.6504633185694804,
+            "shift_x": -107.28031318229787,
+            "shift_y": 5.826922694682058,
+            "shift_z": 7.4944443942091965,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_21.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_21_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_21_metadata.json"
+        }
+    },
+    "Patient_22": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_22.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_22_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -20.154902470395523,
+            "theta_y": 6.320237449502024,
+            "theta_z": 1.457145034903856,
+            "shift_x": -1.5250989758187319,
+            "shift_y": -79.68119640576572,
+            "shift_z": -4.535091225350602,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_22.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_22_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_22_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -19.161261130905274,
+            "theta_y": 8.88513989479827,
+            "theta_z": 1.7891974474532968,
+            "shift_x": -213.3981922870729,
+            "shift_y": 43.333128690906754,
+            "shift_z": -28.879417567288513,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_22.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_22_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_22_metadata.json"
+        }
+    },
+    "Patient_23": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_23.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_23_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": 0.7812144748689978,
+            "theta_y": 3.694951598874416,
+            "theta_z": -9.409945304716398,
+            "shift_x": 2.474922849473285,
+            "shift_y": -11.070683283124982,
+            "shift_z": 3.1844528767577605,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_23.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_23_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_23_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -2.5358900731776592,
+            "theta_y": 5.667363337644567,
+            "theta_z": -4.568165983058009,
+            "shift_x": -138.75798125511264,
+            "shift_y": 18.309991844498377,
+            "shift_z": 4.8783122776288845,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_23.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_23_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_23_metadata.json"
+        }
+    },
+    "Patient_24": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_24.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_24_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -12.342579609680852,
+            "theta_y": 0.3831365357436143,
+            "theta_z": 3.2681960438302022,
+            "shift_x": -1.946821396128567,
+            "shift_y": -25.0418075904749,
+            "shift_z": -12.758000926838218,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_24.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_24_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_24_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -14.582615198754713,
+            "theta_y": -8.138118882975819,
+            "theta_z": 2.90685436023564,
+            "shift_x": -100.03419104709393,
+            "shift_y": 13.834372237274968,
+            "shift_z": -29.756734303211964,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_24.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_24_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_24_metadata.json"
+        }
+    },
+    "Patient_25": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_25.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_25_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -1.3099218858361743,
+            "theta_y": -15.688090120052266,
+            "theta_z": 0.39017966353005096,
+            "shift_x": 0.7276813836626722,
+            "shift_y": -80.60657913706243,
+            "shift_z": -1.76623254616719,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_25.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_25_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_25_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -4.2328353447049984,
+            "theta_y": -16.041013988659863,
+            "theta_z": -2.9929136804862746,
+            "shift_x": -65.65951472427422,
+            "shift_y": 31.274413755324222,
+            "shift_z": 24.080737932820917,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_25.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_25_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_25_metadata.json"
+        }
+    },
+    "Patient_26": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_26.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_26_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": 1.667032375185938,
+            "theta_y": -8.785433485314382,
+            "theta_z": -2.7231353348174325,
+            "shift_x": -7.037533917054591,
+            "shift_y": -85.14290002957021,
+            "shift_z": -6.847118850846094,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_26.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_26_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_26_metadata.json"
+        },
+        "sagit": {
+            "theta_x": 0.6282103286488798,
+            "theta_y": -7.6727472550663505,
+            "theta_z": -0.4686265338939234,
+            "shift_x": -111.33033916149908,
+            "shift_y": -11.168242351148564,
+            "shift_z": -15.931854280579163,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_26.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_26_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_26_metadata.json"
+        }
+    },
+    "Patient_27": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_27.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_27_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -0.49899332337151137,
+            "theta_y": 1.8514534259441426,
+            "theta_z": -4.93173097764965,
+            "shift_x": 14.610613584157747,
+            "shift_y": -45.034123679309864,
+            "shift_z": -18.523176025397476,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_27.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_27_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_27_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -3.6504374430107447,
+            "theta_y": 0.7328242216240006,
+            "theta_z": -4.672642330527285,
+            "shift_x": -72.3115203746474,
+            "shift_y": 11.990731660215179,
+            "shift_z": -17.024492116094123,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_27.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_27_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_27_metadata.json"
+        }
+    },
+    "Patient_28": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_28.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_28_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -4.685669929544697,
+            "theta_y": -6.644100640668479,
+            "theta_z": 2.872256034798501,
+            "shift_x": -15.8638726326802,
+            "shift_y": -112.15319489509322,
+            "shift_z": 26.47049645242366,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_28.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_28_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_28_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -6.822186324410131,
+            "theta_y": -5.888752425456311,
+            "theta_z": 3.718296435181891,
+            "shift_x": -243.7675294178057,
+            "shift_y": -2.30153279190776,
+            "shift_z": 8.623367810444645,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_28.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_28_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_28_metadata.json"
+        }
+    },
+    "Patient_29": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_29.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_29_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -25.0649789600236,
+            "theta_y": -2.2898253899866727,
+            "theta_z": -0.7274702049820149,
+            "shift_x": -10.725252308008084,
+            "shift_y": -37.35260322850927,
+            "shift_z": 41.261935248943985,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_29.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_29_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_29_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -25.134714977791674,
+            "theta_y": -2.0882655300640196,
+            "theta_z": -0.2041735357966925,
+            "shift_x": -171.27649305600667,
+            "shift_y": 3.345368495674775,
+            "shift_z": 40.71847293909725,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_29.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_29_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_29_metadata.json"
+        }
+    },
+    "Patient_30": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_30.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_30_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -15.487751977654415,
+            "theta_y": 10.645825253059328,
+            "theta_z": 15.709217679404272,
+            "shift_x": -2.9412882559215214,
+            "shift_y": -17.807396362673064,
+            "shift_z": -19.20016529499026,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_30.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_30_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_30_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -10.423964392944217,
+            "theta_y": 11.321327542861207,
+            "theta_z": 11.224347282331125,
+            "shift_x": -176.00656593003313,
+            "shift_y": -16.476839523422555,
+            "shift_z": -12.526931547884217,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_30.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_30_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_30_metadata.json"
+        }
+    },
+    "Patient_31": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_31.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_31_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -16.19957328049867,
+            "theta_y": -2.7657530609035166,
+            "theta_z": 3.1055897137858333,
+            "shift_x": 2.330763525675858,
+            "shift_y": -48.77379203970791,
+            "shift_z": -25.955760934719034,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_31.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_31_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_31_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -17.345520961893726,
+            "theta_y": -8.051997455097482,
+            "theta_z": 0.04055760545342957,
+            "shift_x": -110.84516970491035,
+            "shift_y": 11.345751659777266,
+            "shift_z": -25.77328193274038,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_31.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_31_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_31_metadata.json"
+        }
+    },
+    "Patient_32": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_32.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_32_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -4.357434655575384,
+            "theta_y": 6.106487338458754,
+            "theta_z": 2.6279421114031947,
+            "shift_x": 10.85087576646074,
+            "shift_y": -58.32353783927708,
+            "shift_z": 51.527022023669446,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_32.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_32_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_32_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -8.154408476852392,
+            "theta_y": 6.416092063249723,
+            "theta_z": 2.091551007780392,
+            "shift_x": -149.62204188225843,
+            "shift_y": 18.385650124704068,
+            "shift_z": 36.44501850836965,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_32.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_32_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_32_metadata.json"
+        }
+    },
+    "Patient_33": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_33.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_33_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": 2.563637197840651,
+            "theta_y": 0.7895537436165133,
+            "theta_z": 1.9985030391176015,
+            "shift_x": -7.409031281720775,
+            "shift_y": -31.740941457929278,
+            "shift_z": -24.859480436401466,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_33.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_33_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_33_metadata.json"
+        },
+        "sagit": {
+            "theta_x": 1.941229121574707,
+            "theta_y": 1.0080372059368927,
+            "theta_z": 2.7341901515073266,
+            "shift_x": -156.82129022563365,
+            "shift_y": -5.439782499229668,
+            "shift_z": -43.02886876014164,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_33.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_33_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_33_metadata.json"
+        }
+    },
+    "Patient_34": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_34.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_34_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -12.25120303402746,
+            "theta_y": 4.955384041536141,
+            "theta_z": 3.160092050319003,
+            "shift_x": -4.326752810780832,
+            "shift_y": -35.65503137600875,
+            "shift_z": 6.51011140232316,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_34.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_34_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_34_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -12.566708494455417,
+            "theta_y": 3.9243217498461913,
+            "theta_z": 1.8030624364023873,
+            "shift_x": -138.47129716309573,
+            "shift_y": 19.659131602656565,
+            "shift_z": 14.523582439341277,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_34.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_34_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_34_metadata.json"
+        }
+    },
+    "Patient_35": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_35.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_35_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -4.8991968885898025,
+            "theta_y": 7.6130988475889865,
+            "theta_z": -6.158857672496109,
+            "shift_x": 15.832961592201128,
+            "shift_y": -54.72941132095799,
+            "shift_z": -8.177988848978805,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_35.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_35_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_35_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -5.857894519157457,
+            "theta_y": 7.182075992370697,
+            "theta_z": -7.4579631991094235,
+            "shift_x": -63.21787487112473,
+            "shift_y": 4.793024812863585,
+            "shift_z": -11.485359303561596,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_35.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_35_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_35_metadata.json"
+        }
+    },
+    "Patient_36": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_36.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_36_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": 2.65849887167468,
+            "theta_y": 6.595841052734154,
+            "theta_z": -4.509756393057602,
+            "shift_x": -3.561694014020963,
+            "shift_y": -47.731378264346574,
+            "shift_z": -29.985338109448474,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_36.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_36_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_36_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -0.12837471093340602,
+            "theta_y": 5.470036009267083,
+            "theta_z": -4.39544891509234,
+            "shift_x": -126.4638465343014,
+            "shift_y": -18.204280798195217,
+            "shift_z": -36.36878281450944,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_36.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_36_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_36_metadata.json"
+        }
+    },
+    "Patient_38": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_38.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_38_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -16.606042480252512,
+            "theta_y": 6.809088890361663,
+            "theta_z": 3.3437053332172457,
+            "shift_x": 1.9937151984518182,
+            "shift_y": -5.7528916391345,
+            "shift_z": 14.689966663922856,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_38.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_38_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_38_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -16.830035864197814,
+            "theta_y": 4.84261461502785,
+            "theta_z": 2.674304003431427,
+            "shift_x": -160.13566395208377,
+            "shift_y": 27.764804712168882,
+            "shift_z": 20.14326200417011,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_38.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_38_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_38_metadata.json"
+        }
+    },
+    "Patient_39": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_39.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_39_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": 2.0505985741497397,
+            "theta_y": 2.1303391126695463,
+            "theta_z": -9.75305302436266,
+            "shift_x": 0.27938362552732926,
+            "shift_y": -35.4906451272866,
+            "shift_z": 31.109822939167636,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_39.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_39_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_39_metadata.json"
+        },
+        "sagit": {
+            "theta_x": 13.335503407170641,
+            "theta_y": 14.671600495529765,
+            "theta_z": -8.067300100811686,
+            "shift_x": -45.77269102143708,
+            "shift_y": -16.1207947463075,
+            "shift_z": 25.57030232573201,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_39.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_39_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_39_metadata.json"
+        }
+    },
+    "Patient_40": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_40.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_40_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -4.692250302998814,
+            "theta_y": 0.952317477257315,
+            "theta_z": 3.6730240401409904,
+            "shift_x": -3.1356639797128762,
+            "shift_y": -47.09274764940656,
+            "shift_z": -28.44478480565152,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_40.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_40_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_40_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -5.385141782424675,
+            "theta_y": -0.2443596917587737,
+            "theta_z": 3.3712079934902888,
+            "shift_x": -168.7032347104422,
+            "shift_y": -9.466445318904418,
+            "shift_z": -30.52628617736798,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_40.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_40_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_40_metadata.json"
+        }
+    },
+    "Patient_41": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_41.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_41_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": 12.541261681233664,
+            "theta_y": -5.580745996202326,
+            "theta_z": -0.8506973213540062,
+            "shift_x": 4.74328264624137,
+            "shift_y": -31.30477013121719,
+            "shift_z": -54.90655397823434,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_41.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_41_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_41_metadata.json"
+        },
+        "sagit": {
+            "theta_x": 12.730996114750923,
+            "theta_y": -5.4664224190158395,
+            "theta_z": 0.9902122185144722,
+            "shift_x": -129.78146947374623,
+            "shift_y": 27.972060345849094,
+            "shift_z": -56.714665087876256,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_41.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_41_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_41_metadata.json"
+        }
+    },
+    "Patient_43": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_43.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_43_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -20.512909930468936,
+            "theta_y": -6.638780465806143,
+            "theta_z": 2.8484854038824174,
+            "shift_x": -9.860516110009947,
+            "shift_y": -53.40385866741308,
+            "shift_z": 41.789212021085056,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_43.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_43_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_43_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -19.340606032005244,
+            "theta_y": -4.3452953946348,
+            "theta_z": 4.638715572511176,
+            "shift_x": -129.29685834633125,
+            "shift_y": 41.96875037204348,
+            "shift_z": 36.36509237491957,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_43.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_43_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_43_metadata.json"
+        }
+    },
+    "Patient_45": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_45.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_45_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": 6.155474405485623,
+            "theta_y": 3.9258147342562433,
+            "theta_z": -0.5049111859218062,
+            "shift_x": -4.791294982721444,
+            "shift_y": -35.03299592812258,
+            "shift_z": 7.840270829529762,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_front_nifti_files/Patient_45.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_front_nifti_files/Patient_45_metadata.json"
+        },
+        "sagit": {
+            "theta_x": 4.587016695797984,
+            "theta_y": 5.613936792048318,
+            "theta_z": -0.6310152167940629,
+            "shift_x": -23.80731243164911,
+            "shift_y": 10.211626213553224,
+            "shift_z": 16.190490717135248,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_sagit_nifti_files/Patient_45.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_sagit_nifti_files/Patient_45_metadata.json"
+        }
+    },
+    "Patient_46": {
+        "side": "right",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_46.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_46_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -7.474939540246165,
+            "theta_y": 4.169936537167212,
+            "theta_z": -1.4548760887640722,
+            "shift_x": -12.717075068273635,
+            "shift_y": -35.238933304608636,
+            "shift_z": -4.295306949274778,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_front_nifti_files/Patient_46.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_front_nifti_files/Patient_46_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -8.724437874448906,
+            "theta_y": 4.8955337491964475,
+            "theta_z": -0.39880770607129246,
+            "shift_x": -60.470993315871965,
+            "shift_y": -6.8782857683206835,
+            "shift_z": 1.5003960223803707,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_sagit_nifti_files/Patient_46.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_sagit_nifti_files/Patient_46_metadata.json"
+        }
+    },
+    "Patient_47": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_47.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_47_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -10.390819916971754,
+            "theta_y": 7.80514760522248,
+            "theta_z": 3.189891000797573,
+            "shift_x": 10.60310164265769,
+            "shift_y": 7.253386178834676,
+            "shift_z": 26.043676350701073,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_front_nifti_files/Patient_47.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_front_nifti_files/Patient_47_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -10.846743264842454,
+            "theta_y": 7.010061014523069,
+            "theta_z": 3.046983368901902,
+            "shift_x": -37.14459639187815,
+            "shift_y": 20.573804960595734,
+            "shift_z": 12.724313152743802,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_sagit_nifti_files/Patient_47.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_raw_sagit_nifti_files/Patient_47_metadata.json"
+        }
+    },
+    "Patient_49": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_49.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_49_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -4.685669929544697,
+            "theta_y": -6.644100640668479,
+            "theta_z": 2.872256034798501,
+            "shift_x": -15.8638726326802,
+            "shift_y": -112.15319489509322,
+            "shift_z": 26.47049645242366,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_49.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_49_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_49_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -6.822186324410131,
+            "theta_y": -5.888752425456311,
+            "theta_z": 3.718296435181891,
+            "shift_x": -243.7675294178057,
+            "shift_y": -2.30153279190776,
+            "shift_z": 8.623367810444645,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_49.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_49_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_49_metadata.json"
+        }
+    },
+    "Patient_50": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_50.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_50_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -13.203969584451388,
+            "theta_y": -4.325819926493854,
+            "theta_z": -0.20115318784868322,
+            "shift_x": 0.6237325398469458,
+            "shift_y": -74.03876508042833,
+            "shift_z": 17.822441850696887,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_50.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_50_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_50_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -13.013556268291127,
+            "theta_y": -4.1913262782822,
+            "theta_z": -1.1766557845825893,
+            "shift_x": -157.47439239826562,
+            "shift_y": -17.664720394382453,
+            "shift_z": 4.0598525955480955,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_50.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_50_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_50_metadata.json"
+        }
+    },
+    "Patient_52": {
+        "side": "left",
+        "file_tof": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/tof_nifti_files/Patient_52.nii.gz",
+        "file_tof_segm": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/topcow_to_full_segmentation/Patient_52_CoW_seg.nii.gz",
+        "exec_time": {
+            "func_to_minimize": 0,
+            "Jac_func_to_minimize": 0,
+            "update_monitor": 0,
+            "register": 0
+        },
+        "front": {
+            "theta_x": -23.548678006005233,
+            "theta_y": 5.916812497292814,
+            "theta_z": 9.676904573596786,
+            "shift_x": 0.11890597209339626,
+            "shift_y": -106.32105841591545,
+            "shift_z": 19.69983159467707,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_52.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_52_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_front_nifti_files/Patient_52_metadata.json"
+        },
+        "sagit": {
+            "theta_x": -22.173267728965357,
+            "theta_y": 6.397617741416111,
+            "theta_z": 5.905517178028266,
+            "shift_x": -123.69489241167862,
+            "shift_y": 14.741167635243892,
+            "shift_z": 6.487690651713887,
+            "file_xa": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_52.nii.gz",
+            "file_xa_mask": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_52_mask.nii.gz",
+            "file_xa_metadata": "/Users/juliendambrine/Codes/ClementT/data_processed/PIMISUTT/dsa_post_sagit_nifti_files/Patient_52_metadata.json"
+        }
+    }
+}

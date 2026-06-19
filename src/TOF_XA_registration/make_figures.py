@@ -131,10 +131,10 @@ class Envplotter:
 
 if __name__=='__main__':
 
-	with open("input_files_setup.json", "r", encoding="utf-8") as f:
+	with open("input_files_setup_example.json", "r", encoding="utf-8") as f:
 		in_dict = json.load(f, object_pairs_hook=OrderedDict)
 
-	with open("../../results/output.json", "r", encoding="utf-8") as f:
+	with open("../../results/reg_parameters_example.json", "r", encoding="utf-8") as f:
 		data_register = json.load(f, object_pairs_hook=OrderedDict)
 
 
@@ -213,15 +213,13 @@ if __name__=='__main__':
 		correction_affine_sagit=getAffine(theta_x_sagit,theta_y_sagit,theta_z_sagit,shift_x_sagit,shift_y_sagit,shift_z_sagit)[0]
 		
 
-		dir_name="../../results/output"
+		dir_name="../../results/figures_example"
 
 		out_path=dir_name+'/'+p+'/'
 		
 	
 		os.makedirs(out_path, exist_ok=True)
 	
-		print(p)
-
 		envplotter=Envplotter(grid_xa_front,grid_xa_sagit,grid_tof,affine_front = correction_affine_front,affine_sagit = correction_affine_sagit,max_xa_front=0.9*max_front,max_xa_sagit=0.9*max_sagit)
 
 

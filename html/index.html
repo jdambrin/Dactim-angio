@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Explorateur d’images patients</title>
+  <title>Patient image explorer</title>
   <style>
     :root{--bg:#0f172a;--panel:#111826;--muted:#94a3b8;--text:#e2e8f0;--accent:#22d3ee;--accent2:#7c3aed}
     *{box-sizing:border-box}
@@ -48,45 +48,45 @@
 <body>
 <div class="app">
   <header>
-    <h1>Explorateur d’images patients</h1>
+    <h1>Patient image explorer</h1>
     <div class="actions">
-      <div class="hint" id="sourceInfo">Dossier source : <code>…</code></div>
+      <div class="hint" id="sourceInfo">Source folder: <code>…</code></div>
     </div>
   </header>
 
   <aside>
     <div class="search">
-      <input id="patientFilter" type="text" placeholder="Filtrer les patients… (ex: P001)" />
+      <input id="patientFilter" type="text" placeholder="Filter patients… (e.g. P001)" />
     </div>
     <div id="patients" class="patients">
-      <div class="empty">Chargement du dossier…</div>
+      <div class="empty">Loading folder…</div>
     </div>
   </aside>
 
   <main>
     <div class="toolbar">
-      <div id="currentPatient" class="label">Aucun patient sélectionné</div>
+      <div id="currentPatient" class="label">No patient selected</div>
       <div class="spacer"></div>
-      <button id="prevBtn" title="Image précédente (←)">◀</button>
+      <button id="prevBtn" title="Previous image (←)">◀</button>
       <input id="frameSlider" type="range" min="0" max="0" value="0" disabled />
-      <button id="nextBtn" title="Image suivante (→)">▶</button>
-      <button id="playBtn" title="Lecture/Pause (espace)">Lecture</button>
+      <button id="nextBtn" title="Next image (→)">▶</button>
+      <button id="playBtn" title="Play/Pause (space)">Play</button>
       <label class="row"><span class="label">fps</span><input id="fps" type="number" value="6" min="1" max="60" style="width:80px" /></label>
-      <label class="row"><input id="loop" type="checkbox" checked /> <span class="label">Boucle</span></label>
-      <label class="row"><input id="fit" type="checkbox" checked /> <span class="label">Ajuster à l’écran</span></label>
+      <label class="row"><input id="loop" type="checkbox" checked /> <span class="label">Loop</span></label>
+      <label class="row"><input id="fit" type="checkbox" checked /> <span class="label">Fit to screen</span></label>
     </div>
 
     <div class="row" style="gap:14px">
-      <div class="label">Index :<span id="indexLabel">– / –</span></div>
-      <div class="label">Fichier :<span id="fileLabel">–</span></div>
+      <div class="label">Index:<span id="indexLabel">– / –</span></div>
+      <div class="label">File:<span id="fileLabel">–</span></div>
     </div>
 
     <div class="viewer" id="viewer">
-      <img id="image" alt="Aucune image" />
+      <img id="image" alt="No image" />
       <div class="filename" id="filename">—</div>
     </div>
 
-    <div class="hint" style="margin-top:8px">Raccourcis : <span class="kbd">←/→</span> naviguer, <span class="kbd">Espace</span> lecture/pause.</div>
+    <div class="hint" style="margin-top:8px">Shortcuts: <span class="kbd">←/→</span> navigate, <span class="kbd">Space</span> play/pause.</div>
   </main>
 </div>
 
@@ -116,7 +116,7 @@
    *      la page via http:// avec l'autoindex activé.
    * ============================================================ */
   const CONFIG = {
-    basePath: '../results/experiment3',
+    basePath: '../results/figures_full_database',
     acceptedExtensions: ['.png', '.jpg', '.jpeg', '.gif', '.webp'],
     crawlMaxDepth: 4, // profondeur max de descente dans un dossier patient
   };
@@ -144,7 +144,7 @@
   let currentIndex = 0;
   let playTimer = null;
 
-  sourceInfo.innerHTML = 'Dossier source : <code>' + escapeHtml(CONFIG.basePath) + '</code>';
+  sourceInfo.innerHTML = 'Source folder: <code>' + escapeHtml(CONFIG.basePath) + '</code>';
 
   function escapeHtml(s){
     return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -160,7 +160,7 @@
   }
 
   function bytesToNice(n){
-    const u=['o','Ko','Mo','Go'];
+    const u=['B','KB','MB','GB'];
     let i=0; while(n>=1024&&i<u.length-1){n/=1024;i++}
     return n.toFixed( (i?1:0) )+" "+u[i];
   }
@@ -191,7 +191,7 @@
       for(const rel of data){
         if(typeof rel !== 'string' || !isImage(rel)) continue;
         const parts = rel.split('/').filter(Boolean);
-        const patient = parts.length > 1 ? parts[0] : '(Racine)';
+        const patient = parts.length > 1 ? parts[0] : '(Root)';
         const name = parts[parts.length - 1];
         (result[patient] ||= []).push({ name, url: joinUrl(base, rel), sortKey: rel });
       }
@@ -201,7 +201,7 @@
         if(!Array.isArray(files)) continue;
         for(const f of files){
           if(typeof f !== 'string' || !isImage(f)) continue;
-          const rel = patient === '(Racine)' ? f : (patient + '/' + f);
+          const rel = patient === '(Root)' ? f : (patient + '/' + f);
           const name = f.split('/').pop();
           (result[patient] ||= []).push({ name, url: joinUrl(base, rel), sortKey: rel });
         }
@@ -264,7 +264,7 @@
     const rootImgs = top
       .filter(e => !e.isDir && isImage(e.name))
       .map(e => ({ name: e.name, url: e.url, sortKey: decodeURIComponent(new URL(e.url).pathname) }));
-    if(rootImgs.length) result['(Racine)'] = rootImgs;
+    if(rootImgs.length) result['(Root)'] = rootImgs;
 
     for(const d of top.filter(e => e.isDir)){
       const imgs = await collectImages(d.url, 1);
@@ -277,14 +277,14 @@
 
   /* ---------- Orchestration du chargement ---------- */
   async function loadLibrary(){
-    patientsEl.innerHTML = '<div class="empty">Chargement du dossier…</div>';
+    patientsEl.innerHTML = '<div class="empty">Loading folder…</div>';
     try {
       let lib = await tryManifest();
       if(!lib){
         lib = await tryAutoindex();
       }
       if(!lib || !Object.keys(lib).length){
-        showLoadError('Aucune image trouvée dans <code>' + escapeHtml(CONFIG.basePath) + '</code>.');
+        showLoadError('No images found in <code>' + escapeHtml(CONFIG.basePath) + '</code>.');
         return;
       }
       groups = lib;
@@ -294,17 +294,17 @@
       if(patientOrder.length) selectPatient(patientOrder[0]);
     } catch (err){
       showLoadError(
-        'Impossible de lire le dossier <code>' + escapeHtml(CONFIG.basePath) + '</code>.<br><br>' +
-        'Vérifiez que la page est servie via un serveur web (http://) avec l’index de dossier ' +
-        'activé, ou ajoutez un fichier <code>manifest.json</code> dans ce dossier.<br>' +
-        '<span style="opacity:.7">Détail : ' + escapeHtml(err.message || String(err)) + '</span>'
+        'Unable to read the folder <code>' + escapeHtml(CONFIG.basePath) + '</code>.<br><br>' +
+        'Make sure the page is served over a web server (http://) with directory indexing ' +
+        'enabled, or add a <code>manifest.json</code> file in this folder.<br>' +
+        '<span style="opacity:.7">Details: ' + escapeHtml(err.message || String(err)) + '</span>'
       );
     }
   }
 
   function showLoadError(htmlMsg){
     patientsEl.innerHTML = '<div class="empty">' + htmlMsg + '</div>';
-    currentPatientLabel.textContent = 'Aucun patient sélectionné';
+    currentPatientLabel.textContent = 'No patient selected';
     updateControls();
   }
 
@@ -326,7 +326,7 @@
     if(!any){
       const none = document.createElement('div');
       none.className='empty';
-      none.textContent = 'Aucun résultat.';
+      none.textContent = 'No results.';
       patientsEl.appendChild(none);
     }
   }
@@ -349,7 +349,7 @@
     prevBtn.disabled = !len;
     nextBtn.disabled = !len;
     playBtn.disabled = len === 0;
-    currentPatientLabel.textContent = currentPatient ? `Patient : ${currentPatient} (${len} image${len>1?'s':''})` : 'Aucun patient sélectionné';
+    currentPatientLabel.textContent = currentPatient ? `Patient: ${currentPatient} (${len} image${len>1?'s':''})` : 'No patient selected';
   }
 
   // Récupère la taille du fichier (lazy, via HEAD) et met à jour le label.
@@ -375,7 +375,7 @@
     imageEl.style.objectFit = fitInput.checked ? 'contain' : 'none';
     imageEl.src = entry.url;
     imageEl.onload = ()=> imageEl.style.opacity = 1;
-    imageEl.onerror = ()=> { imageEl.style.opacity = 1; imageEl.alt = 'Image introuvable : ' + entry.name; };
+    imageEl.onerror = ()=> { imageEl.style.opacity = 1; imageEl.alt = 'Image not found: ' + entry.name; };
     fileNameOverlay.textContent = entry.name;
     indexLabel.textContent = ` ${currentIndex+1} / ${arr.length}`;
     fileLabel.textContent = entry.size != null
@@ -412,7 +412,7 @@
       if(before===currentIndex && !loopInput.checked){ stopPlay(); }
     }, interval);
   }
-  function stopPlay(){ if(playTimer){ clearInterval(playTimer); playTimer=null; } playBtn.textContent='Lecture'; }
+  function stopPlay(){ if(playTimer){ clearInterval(playTimer); playTimer=null; } playBtn.textContent='Play'; }
 
   /* ---------- Écouteurs UI ---------- */
   frameSlider.addEventListener('input', ()=> showFrame(Number(frameSlider.value)) );
