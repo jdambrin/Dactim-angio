@@ -57,11 +57,10 @@ htmlcov/
 
 _old/
 PIMISUTT/
-example/
-
 
 # pyenv
 # .python-version
 generate_manifest.py
 
 results/reg_parameters_full_database.json
+src/TOF_XA_registration/input_files_setup_full_database.json

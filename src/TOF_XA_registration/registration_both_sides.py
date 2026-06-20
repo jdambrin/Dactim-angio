@@ -161,9 +161,11 @@ def multiScaleRegister(grid_xa_front, grid_xa_sagit, grid_tof,levels,components,
 
 if __name__=='__main__':
 
-	out_json_file='../../results/output.json'
+	in_json_file="input_files_setup_example.json"
+	out_json_file='../../results/reg_parameters_example.json'
 
-	with open("input_files_setup.json", "r", encoding="utf-8") as f:
+
+	with open(in_json_file, "r", encoding="utf-8") as f:
 		in_dict = json.load(f, object_pairs_hook=OrderedDict)
 
 

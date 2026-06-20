@@ -28,7 +28,7 @@ def cleanDSA(grid_xa,border_thickness,subtract=True,first_index=0):
         
         background_val=np.percentile(grid_xa.dat[d][band:-band,band:-band],90)
         grid_xa.dat[d]=background_val-grid_xa.dat[d]
-
+        
     if(subtract):
         reference=grid_xa.dat[first_index].copy()
         for d in grid_xa.dat:
