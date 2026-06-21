@@ -9,14 +9,14 @@
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;background:linear-gradient(180deg,#0f172a,#0b1220);color:var(--text)}
-    .app{display:grid;grid-template-columns:320px 1fr;grid-template-rows:auto 1fr;min-height:100vh}
+    .app{display:grid;grid-template-columns:320px 1fr;grid-template-rows:auto 1fr;height:100vh;overflow:hidden}
     header{grid-column:1/-1;display:flex;gap:16px;align-items:center;padding:16px 20px;border-bottom:1px solid #243041;background:#0b1220;position:sticky;top:0;z-index:5}
     header h1{font-size:18px;margin:0;font-weight:700;letter-spacing:.3px}
     header .actions{margin-left:auto;display:flex;gap:8px;align-items:center}
     .hint{font-size:12px;color:var(--muted)}
     .hint code{color:var(--accent);background:#0d1424;border:1px solid #243041;border-radius:6px;padding:1px 6px}
 
-    aside{border-right:1px solid #243041;background:rgba(17,24,38,.6);backdrop-filter:blur(6px);padding:14px;overflow:auto}
+    aside{border-right:1px solid #243041;background:rgba(17,24,38,.6);backdrop-filter:blur(6px);padding:14px;overflow:auto;min-height:0}
     .search{display:flex;gap:8px;margin-bottom:10px}
     .search input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid #2a364f;background:#0d1424;color:var(--text)}
     .patients{display:flex;flex-direction:column;gap:6px}
@@ -27,7 +27,7 @@
     .empty{opacity:.7;font-size:14px;padding:14px;line-height:1.5}
     .empty code{color:var(--accent)}
 
-    main{padding:16px;display:grid;grid-template-rows:auto auto 1fr;gap:12px;overflow:hidden}
+    main{padding:16px;display:grid;grid-template-rows:auto auto 1fr;gap:12px;overflow:hidden;min-height:0}
     .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
     .toolbar > *{border:1px solid #243041;background:#0d1424;color:var(--text);padding:10px 12px;border-radius:10px}
     .toolbar button{cursor:pointer}
