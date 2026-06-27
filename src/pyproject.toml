@@ -1,10 +1,38 @@
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
-name = "dactim_angio"
+name = "dactim-angio"
 version = "0.1.0"
+description = "À compléter : courte description du package"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "CECILL-2.1"
+license-files = ["LICENSE"]
+authors = [
+    { name = "J. Dambrine", email = "julien.dambrine@math.univ-poitiers.fr" },
+    { name = "C. Thomas", email = "thomas.clement.medecine@gmail.com" },
+]
+keywords = ["angiography", "medical-imaging", "dicom", "nifti"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "nibabel",
+    "pydicom",
+    "pyvista",
+    "scikit-image",
+    "scikit-learn",
+]
 
-[tool.setuptools.packages.find]
-where = ["."]
+[project.urls]
+Homepage = "https://github.com/jdambrin/Dactim-angio"
+Repository = "https://github.com/jdambrin/Dactim-angio"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dactim_angio"]

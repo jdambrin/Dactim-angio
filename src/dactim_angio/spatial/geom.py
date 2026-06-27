@@ -364,9 +364,9 @@ def getAffineDerivatives(theta_x,theta_y,theta_z,sx,sy,sz):
         [s(t1)*s(t3)-c(t1)*c(t3)*s(t2), c(t3)*s(t1)+c(t1)*s(t2)*s(t3), c(t1)*c(t2) ]])
 
     D0RotMat=np.array([
-        [0                  , 0                 , 0       ],
-        [dc(t1)*s(t3)+c(t3)*ds(t1)*s(t2), dc(t1)*c(t3)-ds(t1)*s(t2)*s(t3), -c(t2)*ds(t1)],
-        [ds(t1)*s(t3)-dc(t1)*c(t3)*s(t2), c(t3)*ds(t1)+dc(t1)*s(t2)*s(t3), dc(t1)*c(t2) ]])
+        [0                              , 0                              , 0             ],
+        [dc(t1)*s(t3)+c(t3)*ds(t1)*s(t2), dc(t1)*c(t3)-ds(t1)*s(t2)*s(t3), -c(t2)*ds(t1) ],
+        [ds(t1)*s(t3)-dc(t1)*c(t3)*s(t2), c(t3)*ds(t1)+dc(t1)*s(t2)*s(t3), dc(t1)*c(t2)  ]])
 
     D1RotMat=np.array([
         [dc(t2)*c(t3)                  , -dc(t2)*s(t3)                 , ds(t2)       ],
