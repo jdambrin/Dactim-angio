@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dactim-angio"
-version = "0.1.0"
+version = "0.1.1"
 description = "À compléter : courte description du package"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -36,3 +36,6 @@ Repository = "https://github.com/jdambrin/Dactim-angio"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/dactim_angio"]
+
+[tool.hatch.build.targets.sdist]
+only-include = ["src/dactim_angio"]

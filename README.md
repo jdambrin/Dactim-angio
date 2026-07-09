@@ -1,7 +1,5 @@
 # Dactim-angio
 
-> ⚠️ **À compléter** : une phrase de description officielle du projet (objectif scientifique, contexte de l'équipe).
-
 `dactim_angio` is a Python research library for **angiographic image processing**, providing
 spatial grids, projective geometry, radial basis function interpolation, and differentiable
 similarity metrics — building blocks for **2D/3D registration and reconstruction** of vascular imaging.
@@ -84,6 +82,3 @@ This software is distributed under the **CeCILL Free Software License Agreement 
 (see the [`LICENSE`](LICENSE) file). CeCILL is a copyleft license, GPL-compatible, governed
 by French law, authored by CEA, CNRS and Inria.
 
-## Citation
-
-> ⚠️ **Optionnel** : si ce travail accompagne une publication, ajoute ici la référence à citer.

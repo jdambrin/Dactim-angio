@@ -58,6 +58,8 @@ htmlcov/
 _old/
 PIMISUTT/
 
+publications/
+
 # pyenv
 # .python-version
 generate_manifest.py
