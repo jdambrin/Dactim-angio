@@ -56,8 +56,6 @@ print(grid)                      # shape + scalar-field summary
 # Export to PyVista for 3D visualization
 mesh = grid.toPyvista()
 
-# Compute a differentiable similarity metric between two fields
-value, grad_x, grad_y = mse(fixed_field, moving_field)
 ```
 
 ## Package structure
